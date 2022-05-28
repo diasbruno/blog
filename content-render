@@ -31,7 +31,7 @@ ${the_content}
 EOF`"
 }
 
-function render_content_list {
+function render_all_content {
     local ppath="${PWD}/contents"
     local contents="`ls ${ppath}`"
 

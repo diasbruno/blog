@@ -30,4 +30,4 @@ done
 
 source "${PWD}/content-render"
 
-render_content_list $PUBLISH $DEST_DIR
+render_all_content $PUBLISH $DEST_DIR
