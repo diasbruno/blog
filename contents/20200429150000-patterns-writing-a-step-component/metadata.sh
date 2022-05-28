@@ -1,0 +1,5 @@
+DATE="2020-04-29T15:00:00+00:00"
+TITLE="Patterns: Writing a step component"
+SLUG_TITLE="patterns-writing-a-step-component"
+SLUG="patterns-writing-a-step-component"
+FILENAME="20200429150000-patterns-writing-a-step-component"
