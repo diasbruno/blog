@@ -28,7 +28,7 @@ EOF
 function navigation {
     cat <<-EOF
 <nav>
-  <div><h1><a href="${BASE_DIR}/">diasbruno</a></h1></div>
+  <div><a href="${BASE_DIR}"><h1>diasbruno</h1></a></div>
   <div class="nav-links"><a href="${BASE_DIR}">articles</a></div>
 </nav>
 EOF
