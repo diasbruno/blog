@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -eu
+
+source "${PWD}/tools.bash"
+
+PPATH=""
+
+DEST_DIR="$PWD/../diasbruno.github.io/articles"
+
+PUBLISH=0
+
+while getopts ":f:p:h" arg; do
+    case ${arg} in
+	h)
+	    usage
+	   ;;
+	f)
+	    PPATH="${OPTARG}"
+	    ;;
+	p)
+	    PUBLISH=1
+	    ;;
+	?)
+	echo "Invalid option: -${OPTARG}."
+	exit 2
+	;;
+    esac
+done
+
+source "${PWD}/content-render"
+
+render_content_list $PUBLISH $DEST_DIR

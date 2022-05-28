@@ -1,0 +1,78 @@
+#!/usr/bin/env bash
+
+set -eu
+
+source "${PWD}/tools.bash"
+
+DEST_DIR="${PWD}/contents"
+
+function usage {
+    echo "./$(basename $0) -h --> shows usage"
+    echo "                 -w --> write to file"
+    echo "                 -t --> content's title"
+    echo "                 -d --> content's date"
+}
+
+function write_file {
+    PPATH="${DEST_DIR}/${1}"
+
+    mkdir -p $PPATH
+
+    echo "${2}" > $PPATH/metadata.sh
+    echo "" > $PPATH/content.md
+
+    local result=$?
+
+    if [ $result -eq 0 ]; then
+	log "wrote ${PPATH}"
+    else
+	log "failed to write ${PPATH}"
+    fi
+
+    return $result
+}
+
+DRY_RUN=1
+DATE="`now`"
+TITLE="no title"
+SLUG_TITLE="no-title"
+SLUG=""
+
+while getopts ":t:d:wh" arg; do
+    case ${arg} in
+	h)
+	    usage
+	   ;;
+	w)
+	    DRY_RUN=0
+	    ;;
+	t)
+	    TITLE="${OPTARG}"
+	    SLUG_TITLE=`slugify "${TITLE}"`
+	    ;;
+	d)
+	    DATE="${OPTARG}"
+	    ;;
+	?)
+	echo "Invalid option: -${OPTARG}."
+	exit 2
+	;;
+    esac
+done
+
+SLUG="${SLUG_TITLE}"
+FILENAME="`datefs "${DATE}"`-${SLUG_TITLE}"
+
+CONTENT="`cat <<-EOF
+DATE="${DATE}"
+TITLE="${TITLE}"
+SLUG_TITLE="${SLUG_TITLE}"
+SLUG="${SLUG}"
+FILENAME="${FILENAME}"
+EOF`"
+
+if [ $DRY_RUN -eq 0 ]; then
+    write_file "${FILENAME}" "${CONTENT}"
+else
+    echo "$CONTENT"
+fi
