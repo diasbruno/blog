@@ -28,6 +28,6 @@ while getopts ":f:p:h" arg; do
     esac
 done
 
-source "${PWD}/content-render.bash"
+source "${PWD}/content-render"
 
 render_content $PUBLISH $PPATH $DEST_DIR
