@@ -39,3 +39,31 @@ function render_all_content {
 	render_content $1 "$ppath/$x" $2
     done
 }
+
+function render_article_item {
+    source "${1}/metadata.sh"
+
+    local the_title=$TITLE
+    local the_date=`render_date "${DATE}"`
+
+    echo "<div><a href="./articles/`basename ${FILENAME}`.html"><h1>${the_title}</h1></a><time class="content-datetime" datetime="${DATE}">${the_date}</time></div>";
+}
+
+function render_index {
+    DEST="${2}/index.html"
+
+    if [ "${1}" -eq "0" ]; then
+	update_base_dir "."
+    fi
+
+    local from="${PWD}/contents"
+    local all_articles=""
+
+    for x in `ls ${from}`; do
+	all_articles="${all_articles}`render_article_item "${from}/${x}"`";
+    done
+
+    render_html_wrapper $DEST "`cat <<-EOF | $MARKDOWN
+${all_articles}
+EOF`"
+}
