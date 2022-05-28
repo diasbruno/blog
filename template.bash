@@ -48,5 +48,5 @@ EOF
 }
 
 function render_date {
-    echo ${1} | date +"%b %d, %Y"
+    date "+%b %d, %Y" -d "${1}"
 }
