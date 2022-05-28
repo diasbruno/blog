@@ -10,7 +10,7 @@ DEST_DIR="${PWD}/../diasbruno.github.io/"
 
 PUBLISH=0
 
-while getopts ":f:p:h" arg; do
+while getopts ":ph" arg; do
     case ${arg} in
 	h)
 	    usage
