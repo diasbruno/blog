@@ -4,10 +4,6 @@ set -eu
 
 BASE_DIR="/"
 
-function update_base_dir {
-    BASE_DIR="${1}"
-}
-
 function html_head {
     cat <<-EOF
 <meta charset="UTF-8">

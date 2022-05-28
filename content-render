@@ -8,15 +8,11 @@ source "${PWD}/template.bash"
 MARKDOWN="comrak --unsafe "
 
 function render_content {
-    if [ "${1}" -eq "0" ]; then
-	update_base_dir ".."
-    fi
+    source "${1}/metadata.sh"
 
-    source "${2}/metadata.sh"
+    log "rendering ${TITLE} `basename ${1}`"
 
-    log "rendering ${TITLE} `basename ${2}`"
-
-    DEST="${3}/${FILENAME}.html"
+    DEST="${2}/${FILENAME}.html"
 
     local the_title=$TITLE
     local the_date=`render_date "${DATE}"`
@@ -36,7 +32,7 @@ function render_all_content {
     local contents="`ls ${ppath}`"
 
     for x in $contents; do
-	render_content $1 "$ppath/$x" $2
+	render_content "$ppath/$x" $1
     done
 }
 
@@ -50,11 +46,7 @@ function render_article_item {
 }
 
 function render_index {
-    DEST="${2}/index.html"
-
-    if [ "${1}" -eq "0" ]; then
-	update_base_dir "."
-    fi
+    DEST="${1}/index.html"
 
     local from="${PWD}/contents"
     local all_articles=""

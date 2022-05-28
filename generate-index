@@ -8,16 +8,11 @@ source "${PWD}/content-render"
 
 DEST_DIR="${PWD}/../diasbruno.github.io/"
 
-PUBLISH=0
-
 while getopts ":ph" arg; do
     case ${arg} in
 	h)
 	    usage
 	   ;;
-	p)
-	    PUBLISH=1
-	    ;;
 	?)
 	echo "Invalid option: -${OPTARG}."
 	exit 2
@@ -25,4 +20,4 @@ while getopts ":ph" arg; do
     esac
 done
 
-render_index $PUBLISH $DEST_DIR
+render_index $DEST_DIR
