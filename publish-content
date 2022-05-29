@@ -5,7 +5,7 @@ set -eu
 source "${PWD}/tools.bash"
 
 DRY_RUN=1
-STATUS="draft"
+NEW_STATUS="draft"
 DEFINED=0
 
 function usage {
@@ -21,11 +21,10 @@ while getopts ":dwph" arg; do
 	    usage
 	    ;;
 	d)
-	    STATUS="draft"
 	    DEFINED=1
 	    ;;
 	p)
-	    STATUS=""
+	    NEW_STATUS=""
 	    DEFINED=1
 	    ;;
 	w)
@@ -38,14 +37,14 @@ while getopts ":dwph" arg; do
     esac
 done
 
-if [ "$DEFINED" == "0" ]; then
+if [ "${DEFINED}" == "0" ]; then
     echo "missing the status option."
     usage
     exit 1;
 fi
 
 CONTENTS=`ls -r ./contents`
-COUNTER=0
+COUNTER=1
 CHOOSED=0
 SELECTED=""
 
@@ -56,19 +55,30 @@ done
 
 read -p "choose content: " CHOOSED
 
-COUNTER=0
+COUNTER=1
 for x in $CONTENTS; do
     if [ "${CHOOSED}" == "${COUNTER}" ]; then
-	SELECTED="${x}"
+	SELECTED="$x"
     fi
     COUNTER=$((COUNTER+1))
 done
 
-
 F="${PWD}/contents/${SELECTED}/metadata.sh"
 
 if [ "${DRY_RUN}" == "0" ]; then
-    sed -i '' -e "s/STATUS=\(.*\)/STATUS=\""${STATUS}"\"/g" $F
+    source $F
+
+    log "writing ${SLUG}"
+
+    has_status="`egrep "STATUS=" "${F}" || echo ""`"
+
+    if [ "${has_status}" == "" ]; then
+	log "creating STATUS=${NEW_STATUS}"
+	echo "STATUS=\"${NEW_STATUS}\"" >> $F
+    else
+	log "updating STATUS=\"${NEW_STATUS}\""
+	sed -i "${F}" -e "s/STATUS=\(.*\)/STATUS=${NEW_STATUS}/g"
+    fi
 else
-    cat $F | sed -e "s/STATUS=\(.*\)/STATUS=\""${STATUS}"\"/g"
+    cat $F | sed -e "s/STATUS=\(.*\)/STATUS=\""${NEW_STATUS}"\"/g"
 fi
