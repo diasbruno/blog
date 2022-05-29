@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+set -eu
+
+source "${PWD}/tools.bash"
+
+DRY_RUN=1
+STATUS="draft"
+DEFINED=0
+
+function usage {
+    echo "./$(basename $0) -h --> shows usage"
+    echo "                 -p --> publish"
+    echo "                 -d --> draft"
+    echo "                 -w --> write to file"
+}
+
+while getopts ":dwph" arg; do
+    case ${arg} in
+	h)
+	    usage
+	    ;;
+	d)
+	    STATUS="draft"
+	    DEFINED=1
+	    ;;
+	p)
+	    STATUS=""
+	    DEFINED=1
+	    ;;
+	w)
+	    DRY_RUN=0
+	    ;;
+	?)
+	echo "Invalid option: -${OPTARG}."
+	exit 2
+	;;
+    esac
+done
+
+if [ "$DEFINED" == "0" ]; then
+    echo "missing the status option."
+    usage
+    exit 1;
+fi
+
+CONTENTS=`ls -r ./contents`
+COUNTER=0
+CHOOSED=0
+SELECTED=""
+
+for x in $CONTENTS; do
+    echo "${COUNTER}: $x";
+    COUNTER=$((COUNTER+1))
+done
+
+read -p "choose content: " CHOOSED
+
+COUNTER=0
+for x in $CONTENTS; do
+    if [ "${CHOOSED}" == "${COUNTER}" ]; then
+	SELECTED="${x}"
+    fi
+    COUNTER=$((COUNTER+1))
+done
+
+
+F="${PWD}/contents/${SELECTED}/metadata.sh"
+
+if [ "${DRY_RUN}" == "0" ]; then
+    sed -i '' -e "s/STATUS=\(.*\)/STATUS=\""${STATUS}"\"/g" $F
+else
+    cat $F | sed -e "s/STATUS=\(.*\)/STATUS=\""${STATUS}"\"/g"
+fi
