@@ -13,7 +13,7 @@ function usage {
     echo "                 -d --> content's date"
 }
 
-function write_file {
+function create_content {
     PPATH="${DEST_DIR}/${1}"
 
     mkdir -p $PPATH
@@ -74,7 +74,7 @@ STATUS="${STATUS}"
 EOF`"
 
 if [ $DRY_RUN -eq 0 ]; then
-    write_file "${FILENAME}" "${CONTENT}"
+    create_content "${FILENAME}" "${CONTENT}"
 else
     echo "$CONTENT"
 fi
