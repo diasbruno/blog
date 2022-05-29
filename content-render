@@ -7,18 +7,24 @@ source "${PWD}/template.bash"
 
 MARKDOWN="comrak --unsafe "
 
+function render_date_dest_fs {
+    TZ=UTC date "+%Y/%m/%d" -d "${1}"
+}
+
 function render_content {
     source "${1}/metadata.sh"
 
     log "rendering ${TITLE} `basename ${1}`"
 
-    DEST="${2}/${FILENAME}.html"
-
     local the_title=$TITLE
     local the_date=`render_date "${DATE}"`
     local the_content=`cat $PWD/contents/$FILENAME/content.md`
+    local the_file_path="${2}/`render_date_dest_fs "${DATE}"`"
+    local the_full_file_path="${the_file_path}/${SLUG}.html"
 
-    render_html_wrapper $DEST "`cat <<-EOF | $MARKDOWN
+    mkdir -p $the_file_path
+
+    render_html_wrapper $the_full_file_path "`cat <<-EOF | $MARKDOWN
 # ${the_title}
 
 <div class="content-info"><span class="content-kind">article</span> &#10072; <time class="content-datetime" datetime="${DATE}">${the_date}</time></div>
@@ -41,8 +47,10 @@ function render_article_item {
 
     local the_title=$TITLE
     local the_date=`render_date "${DATE}"`
+    local the_file_path="articles/`render_date_dest_fs "${DATE}"`"
+    local the_url="${the_file_path}/${SLUG}.html"
 
-    echo "<div class=\"article-item\"><a href=\"./articles/`basename ${FILENAME}`.html\"><h1>${the_title}</h1></a><time class=\"content-datetime\" datetime=\"${DATE}\">${the_date}</time></div>";
+    echo "<div class=\"article-item\"><a href=\"${the_url}\"><h1>${the_title}</h1></a><time class=\"content-datetime\" datetime=\"${DATE}\">${the_date}</time></div>";
 }
 
 function render_index {
