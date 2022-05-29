@@ -20,4 +20,6 @@ while getopts ":ph" arg; do
     esac
 done
 
+log "rendering index"
+
 render_index $DEST_DIR
