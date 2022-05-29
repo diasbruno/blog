@@ -42,7 +42,7 @@ function render_article_item {
     local the_title=$TITLE
     local the_date=`render_date "${DATE}"`
 
-    echo "<div><a href="./articles/`basename ${FILENAME}`.html"><h1>${the_title}</h1></a><time class="content-datetime" datetime="${DATE}">${the_date}</time></div>";
+    echo "<div class=\"article-item\"><a href=\"./articles/`basename ${FILENAME}`.html\"><h1>${the_title}</h1></a><time class=\"content-datetime\" datetime=\"${DATE}\">${the_date}</time></div>";
 }
 
 function render_index {
