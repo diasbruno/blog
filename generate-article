@@ -8,8 +8,6 @@ PPATH=""
 
 DEST_DIR="$PWD/../diasbruno.github.io/articles"
 
-PUBLISH=0
-
 while getopts ":f:p:h" arg; do
     case ${arg} in
 	h)
@@ -30,4 +28,4 @@ done
 
 source "${PWD}/content-render"
 
-render_content $PUBLISH $PPATH $DEST_DIR
+render_content $PPATH $DEST_DIR
