@@ -37,8 +37,9 @@ DATE="`now`"
 TITLE="no title"
 SLUG_TITLE="no-title"
 SLUG=""
+STATUS="draft"
 
-while getopts ":t:d:wh" arg; do
+while getopts ":t:d:wph" arg; do
     case ${arg} in
 	h)
 	    usage
@@ -69,6 +70,7 @@ TITLE="${TITLE}"
 SLUG_TITLE="${SLUG_TITLE}"
 SLUG="${SLUG}"
 FILENAME="${FILENAME}"
+STATUS="${STATUS}"
 EOF`"
 
 if [ $DRY_RUN -eq 0 ]; then

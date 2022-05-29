@@ -1,5 +1,3 @@
-[First draft]
-
 Things get so much easier when you try
 to understand how the types work together
 to accomplish some work.
