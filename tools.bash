@@ -20,3 +20,31 @@ function datefs {
 function log {
     echo "`now` | $1"
 }
+
+function show_list {
+    local list="${1}"
+    local counter=1
+    for x in $list; do
+	echo "${counter}: $x";
+	counter=$((counter+1))
+    done
+}
+
+function select_option {
+    local list="${1}"
+    local counter=1
+    local selected=""
+    local choosed=""
+
+    read -p "select option: " choosed
+
+    counter=1
+    for x in $list; do
+	if [ "${choosed}" == "${counter}" ]; then
+	    selected="$x"
+	fi
+	counter=$((counter+1))
+    done
+
+    echo "${selected}"
+}

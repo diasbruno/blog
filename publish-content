@@ -44,24 +44,10 @@ if [ "${DEFINED}" == "0" ]; then
 fi
 
 CONTENTS=`ls -r ./contents`
-COUNTER=1
-CHOOSED=0
-SELECTED=""
 
-for x in $CONTENTS; do
-    echo "${COUNTER}: $x";
-    COUNTER=$((COUNTER+1))
-done
+show_list "${CONTENTS}"
 
-read -p "choose content: " CHOOSED
-
-COUNTER=1
-for x in $CONTENTS; do
-    if [ "${CHOOSED}" == "${COUNTER}" ]; then
-	SELECTED="$x"
-    fi
-    COUNTER=$((COUNTER+1))
-done
+SELECTED="`select_option "${CONTENTS}"`"
 
 F="${PWD}/contents/${SELECTED}/metadata.sh"
 
