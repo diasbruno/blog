@@ -51,7 +51,7 @@ function render_index {
     local from="${PWD}/contents"
     local all_articles=""
 
-    for x in `ls ${from}`; do
+    for x in `ls -r ${from}`; do
 	all_articles="${all_articles}`render_article_item "${from}/${x}"`";
     done
 
