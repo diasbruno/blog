@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+set -eu
+
+source "${PWD}/tools.bash"
+
+DEST_DIR="${PWD}/contents"
+
+function usage {
+    echo "./$(basename $0) -h --> shows usage"
+}
+
+DRY_RUN=1
+
+CONTENTS=`ls -r ./contents`
+
+show_list "${CONTENTS}"
+SELECTED="`select_option "${CONTENTS}"`"
+
+PREVIOUS="./contents/${SELECTED}"
+
+source "${PREVIOUS}/metadata.sh"
+
+NEW_DATE="`change_date_from "${DATE}"`"
+
+NEW_FILENAME="`datefs "${NEW_DATE}"`-${SLUG_TITLE}"
+
+./create-content -t "${TITLE}" -d "${NEW_DATE}" -w
+
+cp "${PREVIOUS}/content.md" "./contents/${NEW_FILENAME}/content.md"
+
+rm -rf "./contents/${SELECTED}"
