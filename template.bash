@@ -9,6 +9,7 @@ function html_head {
 <meta charset="UTF-8">
 <title>diasbruno</title>
 <base href="${BASE_DIR}">
+<meta name="viewport" content="width=device-width" />
 <link rel="stylesheet" type="text/css" href="./css/reset.css" />
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
 <link rel="stylesheet" type="text/css" href="./css/highlight.min.css" />
