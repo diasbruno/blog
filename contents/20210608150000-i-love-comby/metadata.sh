@@ -5,3 +5,4 @@ SLUG="i-love-comby"
 FILENAME="20210608150000-i-love-comby"
 
 CONTENT=""
+STATUS=""
