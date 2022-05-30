@@ -3,4 +3,4 @@ that we can try again before we give up.
 
 Here is one way to do it.
 
-{% replit @diasbruno/retrying-promises %}
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@diasbruno/retrying-promises?embed=true"></iframe>

@@ -13,8 +13,8 @@ fragments - something like Elixir, or, like the most
 beautiful language, in my opinion, Lisp.
 At least, we can always manipulate strings...
 
-We also have `Reflect` and `Proxy`, 
-that are good tools for specific cases, 
+We also have `Reflect` and `Proxy`,
+that are good tools for specific cases,
 but we are not going to talk about them
 in this article (maybe on the next one).
 
@@ -27,7 +27,7 @@ more interesting stuff with it.
 
 ## The Function object
 
-We can use the Function object constructor 
+We can use the Function object constructor
 to generate new functions.
 
 Its specification says that the last argument
@@ -203,4 +203,4 @@ you can generate code from DSL
 That are a lot more in this topic, and now,
 it's up to you to use your creativity!
 
-{% replit @diasbruno/metaprogramming-in-js %}
+<iframe frameborder="0" width="100%" height="500px" src="https://replit.com/@diasbruno/metaprogramming-in-js?embed=true"></iframe>
