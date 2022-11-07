@@ -1,34 +1,43 @@
 #!/usr/bin/env bash
 
-set -eu
+set +euH
 
-source "${PWD}/tools.bash"
+source "${PWD}/engine.bash"
 
-DRY_RUN=1
 NEW_STATUS="draft"
-DEFINED=0
 
 function usage {
     echo "./$(basename $0) -h --> shows usage"
     echo "                 -p --> publish"
     echo "                 -d --> draft"
+    echo "                 -n --> hidden"
     echo "                 -w --> write to file"
+    exit 1
 }
 
-while getopts ":dwph" arg; do
+function update_metadata {
+    write_content_metadata $FILENAME
+    log "wrote ${FILENAME}"
+}
+
+expect_args "$*"
+
+while getopts ":dwphn" arg; do
     case ${arg} in
-	h)
-	    usage
-	    ;;
 	d)
-	    DEFINED=1
+	    NEW_STATUS="draft"
 	    ;;
 	p)
-	    NEW_STATUS=""
-	    DEFINED=1
+	    NEW_STATUS="publish"
+	    ;;
+	n)
+	    NEW_STATUS="hidden"
 	    ;;
 	w)
-	    DRY_RUN=0
+	    must_write
+	    ;;
+	h)
+	    usage
 	    ;;
 	?)
 	echo "Invalid option: -${OPTARG}."
@@ -37,34 +46,14 @@ while getopts ":dwph" arg; do
     esac
 done
 
-if [ "${DEFINED}" == "0" ]; then
-    echo "missing the status option."
-    usage
-    exit 1;
-fi
-
-CONTENTS=`ls -r ./contents`
+CONTENTS=`list_contents ./contents`
 
 show_list "${CONTENTS}"
 
 SELECTED="`select_option "${CONTENTS}"`"
 
-F="${PWD}/contents/${SELECTED}/metadata.sh"
+load_metadata $SELECTED
 
-if [ "${DRY_RUN}" == "0" ]; then
-    source $F
+set_status "${NEW_STATUS}"
 
-    log "writing ${SLUG}"
-
-    has_status="`egrep "STATUS=" "${F}" || echo ""`"
-
-    if [ "${has_status}" == "" ]; then
-	log "creating STATUS=${NEW_STATUS}"
-	echo "STATUS=\"${NEW_STATUS}\"" >> $F
-    else
-	log "updating STATUS=\"${NEW_STATUS}\""
-	sed -i "${F}" -e "s/STATUS=\(.*\)/STATUS=${NEW_STATUS}/g"
-    fi
-else
-    cat $F | sed -e "s/STATUS=\(.*\)/STATUS=\""${NEW_STATUS}"\"/g"
-fi
+is_dry_run && make_content_metadata || update_metadata

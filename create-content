@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-set -eu
+set +H
 
-source "${PWD}/tools.bash"
-
-DEST_DIR="${PWD}/contents"
+source "${ENGINE_PATH}/engine.bash"
 
 function usage {
     echo "./$(basename $0) -h --> shows usage"
@@ -13,47 +11,21 @@ function usage {
     echo "                 -d --> content's date"
 }
 
-function create_content {
-    PPATH="${DEST_DIR}/${1}"
+expect_args "$*"
 
-    mkdir -p $PPATH
-
-    echo "${2}" > $PPATH/metadata.sh
-    echo "" > $PPATH/content.md
-
-    local result=$?
-
-    if [ $result -eq 0 ]; then
-	log "wrote ${PPATH}"
-    else
-	log "failed to write ${PPATH}"
-    fi
-
-    return $result
-}
-
-DRY_RUN=1
-DATE="`now`"
-TITLE="no title"
-SLUG_TITLE="no-title"
-SLUG=""
-STATUS="draft"
+T=""
+D=`now`
 
 while getopts ":t:d:wph" arg; do
     case ${arg} in
-	h)
-	    usage
+	t) T="${OPTARG}"
 	   ;;
-	w)
-	    DRY_RUN=0
-	    ;;
-	t)
-	    TITLE="${OPTARG}"
-	    SLUG_TITLE=`slugify "${TITLE}"`
-	    ;;
-	d)
-	    DATE="${OPTARG}"
-	    ;;
+	d) D="${OPTARG}"
+	   ;;
+	w) must_write
+	   ;;
+	h) usage
+	   ;;
 	?)
 	echo "Invalid option: -${OPTARG}."
 	exit 2
@@ -61,20 +33,5 @@ while getopts ":t:d:wph" arg; do
     esac
 done
 
-SLUG="${SLUG_TITLE}"
-FILENAME="`datefs "${DATE}"`-${SLUG_TITLE}"
 
-CONTENT="`cat <<-EOF
-DATE="${DATE}"
-TITLE="${TITLE}"
-SLUG_TITLE="${SLUG_TITLE}"
-SLUG="${SLUG}"
-FILENAME="${FILENAME}"
-STATUS="${STATUS}"
-EOF`"
-
-if [ $DRY_RUN -eq 0 ]; then
-    create_content "${FILENAME}" "${CONTENT}"
-else
-    echo "$CONTENT"
-fi
+is_dry_run && make_content_metadata || create_content "${T}" "${D}"

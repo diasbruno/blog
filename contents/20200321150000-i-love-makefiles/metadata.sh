@@ -3,4 +3,4 @@ TITLE="I love makefiles"
 SLUG_TITLE="i-love-makefiles"
 SLUG="i-love-makefiles"
 FILENAME="20200321150000-i-love-makefiles"
-STATUS=
+STATUS="publish"

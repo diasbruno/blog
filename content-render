@@ -14,6 +14,11 @@ function render_date_dest_fs {
 function render_content {
     source "${1}/metadata.sh"
 
+    if [[ "${STATUS}" == "hidden" ]]; then
+	log "skipping ${TITLE} `basename ${1}`"
+	return;
+    fi
+
     log "rendering ${TITLE} `basename ${1}`"
 
     local the_title=$TITLE
@@ -49,6 +54,10 @@ function render_all_content {
 
 function render_article_item {
     source "${1}/metadata.sh"
+
+    if [[ "${STATUS}" == "hidden" ]]; then
+	return;
+    fi
 
     local the_title=$TITLE
     local the_date=`render_date "${DATE}"`

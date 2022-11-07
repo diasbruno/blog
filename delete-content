@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+set +euH
+
+source "${PWD}/engine.bash"
+
+function usage {
+    echo "./$(basename $0) -h --> shows usage"
+    echo "                 -w --> write to file"
+}
+
+while getopts ":wh" arg; do
+    case ${arg} in
+	w)
+	    must_write
+	    ;;
+	h)
+	    usage
+	    ;;
+	?)
+	echo "Invalid option: -${OPTARG}."
+	exit 2
+	;;
+    esac
+done
+
+CONTENTS=`list_contents ./contents`
+
+show_list "${CONTENTS}"
+
+SELECTED="`select_option "${CONTENTS}"`"
+
+load_metadata $SELECTED
+
+is_dry_run && make_content_metadata || delete_content "${SELECTED}"

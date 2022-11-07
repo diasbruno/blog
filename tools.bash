@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 
-set -eu
+_DRY_RUN=1
 
-# expected 's/[^A-Za-z0-9\s]//g'
-FILTER_SLUGIFY='s/[\!\-\@\:]//g'
-
-function now {
-    echo "`TZ=UTC date --iso-8601=s`"
+function must_write {
+    _DRY_RUN=0
 }
 
-function datefs {
-    TZ=UTC date +%Y%m%d%H%M%S -d "${1}"
+function dry_run {
+    _DRY_RUN=1
 }
 
-function log {
-    echo "`now` | $1"
+function is_dry_run {
+    test $_DRY_RUN -eq 1
+}
+
+function list_contents {
+    ls -r "${1}"
 }
 
 function show_list {
@@ -43,35 +44,6 @@ function select_option {
     done
 
     echo "${selected}"
-}
-
-function date_day {
-    TZ=UTC date +%d -d "${1}" | cat
-}
-
-function date_month {
-    TZ=UTC date +%m -d "${1}" | cat
-}
-
-function date_year {
-    TZ=UTC date +%Y -d "${1}" | cat
-}
-
-function date_hour {
-    TZ=UTC date +%H -d "${1}" | cat
-}
-
-function date_minutes {
-    TZ=UTC date +%M -d "${1}" | cat
-}
-
-function date_seconds {
-    TZ=UTC date +%S -d "${1}" | cat
-}
-
-function read_or_default {
-    read -p "${1}" VAR
-    [ -z "${VAR}" ] && echo "${2}" || echo "${VAR}" | cat
 }
 
 function change_date_from {

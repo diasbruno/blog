@@ -1,32 +1,29 @@
 #!/usr/bin/env bash
 
-set -eu
+set +euH
 
-source "${PWD}/tools.bash"
-
-DEST_DIR="${PWD}/contents"
+source "${PWD}/engine.bash"
 
 function usage {
     echo "./$(basename $0) -h --> shows usage"
 }
 
-DRY_RUN=1
-
-CONTENTS=`ls -r ./contents`
+CONTENTS=`list_contents ./contents`
 
 show_list "${CONTENTS}"
+
 SELECTED="`select_option "${CONTENTS}"`"
 
-PREVIOUS="./contents/${SELECTED}"
+PREVIOUS=`in_contents_path "${SELECTED}"`
 
-source "${PREVIOUS}/metadata.sh"
+load_metadata $PREVIOUS
 
-NEW_DATE="`change_date_from "${DATE}"`"
+NEW_DATE=`change_date_from "${DATE}"`
 
 NEW_FILENAME="`datefs "${NEW_DATE}"`-${SLUG_TITLE}"
 
-./create-content -t "${TITLE}" -d "${NEW_DATE}" -w
+create_content "${TITLE}" "${NEW_DATE}"
 
-cp "${PREVIOUS}/content.md" "./contents/${NEW_FILENAME}/content.md"
+copy_content_from $PREVIOUS $NEW_FILENAME
 
 rm -rf "./contents/${SELECTED}"
