@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-set -eu
-
-source "${PWD}/tools.bash"
+source "${PWD}/engine.bash"
 source "${PWD}/template.bash"
 
 MARKDOWN="comrak --unsafe "
@@ -65,14 +63,14 @@ function render_article_item {
     local the_url="${the_file_path}/${SLUG}.html"
 
     local draft=""
-    if [ "${STATUS}" != "" ]; then
+    if [ "${STATUS}" != "publish" ]; then
 	draft="<span>${STATUS}</span> &#10072;"
     fi
 
     cat <<-EOF
 <div class="article-item">
 <a href="${the_url}"><h1>${the_title}</h1></a>
-<div>${draft}<time class="content-datetime" datetime="${DATE}">${the_date}</time></div>
+<div>${draft} <time class="content-datetime" datetime="${DATE}">${the_date}</time></div>
 </div>
 EOF
 }

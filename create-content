@@ -18,9 +18,9 @@ D=`now`
 
 while getopts ":t:d:wph" arg; do
     case ${arg} in
-	t) T="${OPTARG}"
+	t) set_title "${OPTARG}"
 	   ;;
-	d) D="${OPTARG}"
+	d) set_date "${OPTARG}"
 	   ;;
 	w) must_write
 	   ;;
@@ -33,5 +33,7 @@ while getopts ":t:d:wph" arg; do
     esac
 done
 
+set_filename "`make_content_filepath`"
+set_status "hidden"
 
-is_dry_run && make_content_metadata || create_content "${T}" "${D}"
+is_dry_run && make_content_metadata || create_content "${TITLE}" "${DATE}"
