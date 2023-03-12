@@ -13,7 +13,7 @@ function set_date {
 
 function set_title {
     TITLE="${1}"
-    set_slug_title "`slugify "${TITLE}"`"
+    set_slug_title "`slugifier "${TITLE}"`"
 }
 
 function set_slug_title {

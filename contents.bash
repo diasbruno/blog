@@ -39,7 +39,7 @@ function create_content {
 
     set_title "${the_title}"
     set_date "${the_date}"
-    set_slug `slugify "${the_title}"`
+    set_slug `slugifier "${the_title}"`
     set_slug_title "${SLUG}"
     set_filename "`make_content_filepath`"
     set_status "hidden"
