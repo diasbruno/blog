@@ -1,0 +1,6 @@
+DATE="2023-03-12T19:58:55+00:00"
+TITLE="forget about state; think about events/commands"
+SLUG_TITLE="forget-about-state--think-about-events"
+SLUG="forget-about-state--think-about-events"
+FILENAME="20230312195855-forget-about-state--think-about-events"
+STATUS="publish"
