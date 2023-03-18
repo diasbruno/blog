@@ -22,8 +22,10 @@ function render_content {
     local the_title=$TITLE
     local the_date=`render_date "${DATE}"`
     local the_content=`cat $PWD/contents/$FILENAME/content.md`
-    local the_file_path="${2}/`render_date_dest_fs "${DATE}"`"
+    local the_uri_date=`render_date_dest_fs "${DATE}"`
+    local the_file_path="${3}/${the_uri_date}"
     local the_full_file_path="${the_file_path}/${SLUG}.html"
+    local the_uri_path="${the_uri_date}/${SLUG}.html"
 
     mkdir -p $the_file_path
 
@@ -32,7 +34,7 @@ function render_content {
 	draft="<span>${STATUS}</span> &#10072;"
     fi
 
-    render_html_wrapper $the_full_file_path "`cat <<-EOF | $MARKDOWN
+    render_html_wrapper $the_full_file_path "${the_uri_path}" "`cat <<-EOF | $MARKDOWN
 # ${the_title}
 
 <div class="content-info"><span>article</span> &#10072; ${draft} <time datetime="${DATE}">${the_date}</time></div>
@@ -46,7 +48,7 @@ function render_all_content {
     local contents="`ls ${ppath}`"
 
     for x in $contents; do
-	render_content "$ppath/$x" $1
+	render_content "$ppath/$x" "$x" "$1"
     done
 }
 
@@ -85,7 +87,7 @@ function render_index {
 	all_articles="${all_articles}`render_article_item "${from}/${x}"`";
     done
 
-    render_html_wrapper $DEST "`cat <<-EOF | $MARKDOWN
+    render_html_wrapper "${DEST}" "" "`cat <<-EOF | $MARKDOWN
 ${all_articles}
 EOF`"
 }

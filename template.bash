@@ -4,7 +4,22 @@ set -eu
 
 BASE_DIR="/"
 
+function og_tag {
+    if [ -z "$1" ]; then
+	echo ""
+    else
+	cat <<-EOF
+<meta property="og:title" content="${TITLE}" />
+<meta property="og:type" content="${OG_TYPE}" />
+<meta property="og:image" content="${OG_IMAGE}" />
+<meta property="og:url" content="https://diasbruno.github.io/articles/${2}" />
+EOF
+    fi
+}
+
 function html_head {
+    local og_tags_rendered="`og_tag "${USE_OG:-""}" "$1"`"
+
     cat <<-EOF
 <meta charset="UTF-8">
 <title>diasbruno</title>
@@ -13,6 +28,7 @@ function html_head {
 <link rel="stylesheet" type="text/css" href="./css/style.css" />
 <link rel="stylesheet" type="text/css" href="./css/milligram.css" />
 <link rel="stylesheet" type="text/css" href="./css/highlight.min.css" />
+${og_tags_rendered}
 EOF
 }
 
@@ -32,17 +48,19 @@ EOF
 }
 
 function render_html_wrapper {
-    local hh=`html_head`
+    local hh=`html_head "$2"`
     local nav=`navigation`
     local pf=`html_footer`
 
     cat <<-EOF > ${1}
 <!DOCTYPE html>
-<html>
+<html prefix="og: http://ogp.me/ns#" >
+<head>
 ${hh}
+</head>
 <body><main>
 ${nav}
-<section class="content">${2}</section>
+<section class="content">${3}</section>
 ${pf}
 </main></body></html>
 EOF
