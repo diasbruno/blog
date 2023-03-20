@@ -11,7 +11,7 @@ function og_tag {
 	cat <<-EOF
 <meta property="og:title" content="${TITLE}" />
 <meta property="og:type" content="${OG_TYPE}" />
-<meta property="og:image" content="${OG_IMAGE}" />
+<meta property="og:image" content="https://diasbruno.github.io${OG_IMAGE}" />
 <meta property="og:url" content="https://diasbruno.github.io/articles/${2}" />
 EOF
     fi
