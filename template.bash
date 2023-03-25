@@ -14,6 +14,7 @@ function og_tag {
 <meta property="og:image" content="https://diasbruno.github.io${OG_IMAGE}" />
 <meta property="og:url" content="https://diasbruno.github.io/articles/${2}" />
 <meta property="og:author" content="Bruno Dias" />
+<meta property="og:description" content="${OG_DESCRIPTION}" />
 EOF
     fi
 }
