@@ -1,6 +1,6 @@
 references:
 
-[Functional pears - The zipper - Gérard Huet 1997](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)
+[Functional pearl - The zipper - Gérard Huet 1997](https://www.st.cs.uni-saarland.de/edu/seminare/2005/advanced-fp/docs/huet-zipper.pdf)
 
 ---
 
