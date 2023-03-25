@@ -11,6 +11,7 @@ function og_tag {
 	cat <<-EOF
 <meta name="author" content="Bruno Dias" />
 <meta name="description" content="${OG_DESCRIPTION}" />
+<meta name="robot" content="noindex,nofollow" />
 <meta property="og:title" content="${TITLE}" />
 <meta property="og:type" content="${OG_TYPE}" />
 <meta property="og:image" content="https://diasbruno.github.io${OG_IMAGE}" />
