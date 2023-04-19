@@ -1,0 +1,5 @@
+ENGINE_PATH="${PWD}"
+ENGINE_CONTENT_PATH="${ENGINE_PATH}/contents"
+
+ROOT_DEST_DIR="${PWD}/../diasbruno.github.io"
+ARTICLES_DEST_DIR="${ROOT_DEST_DIR}/articles"
