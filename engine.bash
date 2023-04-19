@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source "${ENGINE_CONFIG="./config"}"
+
 source "${ENGINE_PATH}/bash_extensions.bash"
 source "${ENGINE_PATH}/date.bash"
 source "${ENGINE_PATH}/string.bash"
