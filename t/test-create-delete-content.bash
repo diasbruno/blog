@@ -5,7 +5,7 @@ ECP=$ENGINE_CONTENT_PATH
 export ENGINE_CONFIG="${PWD}/config"
 
 source "./test-tools.bash"
-source "${ENGINE_PATH}/engine.bash"
+source "${PWD}/../engine.bash"
 
 disable_log
 
