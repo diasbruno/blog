@@ -11,9 +11,9 @@ disable_log
 
 mkdir -p $ENGINE_CONTENT_PATH
 
-T="test ! content"
+T="test content!"
 D="`now`"
-S="test-content"
+S="test-content-"
 
 create_content "${T}" "${D}"
 
