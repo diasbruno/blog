@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-
-set -eu
-
-source "${PWD}/engine.bash"
-
-bash ./generate-articles
-bash ./generate-index

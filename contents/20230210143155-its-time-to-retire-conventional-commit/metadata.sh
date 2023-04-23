@@ -1,6 +1,0 @@
-DATE="2023-02-10T14:31:55+00:00"
-TITLE="It's time to retire conventional commit"
-SLUG_TITLE="its-time-to-retire-conventional-commit"
-SLUG="its-time-to-retire-conventional-commit"
-FILENAME="20230210143155-its-time-to-retire-conventional-commit"
-STATUS="publish"

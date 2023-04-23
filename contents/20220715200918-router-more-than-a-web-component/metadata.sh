@@ -1,6 +1,0 @@
-DATE="2022-07-15T20:09:18+00:00"
-TITLE="Router - more than a web component"
-SLUG_TITLE="router-more-than-a-web-component"
-SLUG="router-more-than-a-web-component"
-FILENAME="20220715200918-router-more-than-a-web-component"
-STATUS="hidden"
