@@ -24,15 +24,17 @@
    :if-does-not-exist :create))
 
 (defun navigation ()
-  (let ((links '(((:href . "/") (:title . "articles"))
-		 ((:href . "/opensource") (:title . "opensource")))))
-    (spinneret:with-html-string
-      (:tag :name :nav
-	    (list (:div (:a :attrs (list :href "/") (:h1 "diasbruno")))
-		  (:div :attrs (list :class "nav-links")
-			(dolist (data links)
-			  (:a :attrs (list :href (cdr (assoc :href data)) :class "nav-links")
-			      (cdr (assoc :title data))))))))))
+  (spinneret:with-html-string
+    (:tag :name :nav
+	  (list (:div (:a :attrs (list :href "/") (:h1 "diasbruno")))
+		(:div :attrs (list :class "nav-links")
+		      (list
+		       (:a :attrs (list :href "/" :class "nav-links")
+			   "articles")
+		       (:a :attrs (list :href "/opensource" :class "nav-links")
+			   "opensource")
+		       (:a :attrs (list :href "https://github.com/diasbruno" :class "nav-links" :target "_blank")
+			   "github")))))))
 
 (defmacro page-layout (&body body)
   `(spinneret:with-html
