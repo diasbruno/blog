@@ -56,6 +56,17 @@
 
 (defmethod reload ((db post-database))
   (init db))
+
+(defmethod create-item ((db post-database) &key title date status)
+  (let ((post (make-post :title title
+			 :date date
+			 :status status)))
+    (setf (diasbruno.database:database-data db)
+	  (append (diasbruno.database:database-data db)
+		  (list post)))
+    (print (diasbruno.database:database-data db))
+    post))
+
 (defun initialize-post-database (path)
   (let ((db (make-instance 'post-database :source path)))
     (init db)
