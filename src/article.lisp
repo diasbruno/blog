@@ -25,7 +25,8 @@
   (with-output-to-string (rendered)
     (let ((spinneret:*html* rendered))
       (diasbruno.page:page-layout
-	(:div (list
+	(:div :attrs (list :class "article-section")
+	      (list
 	       (:h1 (diasbruno.post:post-title post))
 	       (:div :attrs (list :class "content-info")
 		     (:span "article")
