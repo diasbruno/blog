@@ -44,7 +44,8 @@
 (defmethod create-item ((db opensource-database) &key name url description language)
   (let ((project (make-opensource :name name :url url :description description :language language)))
     (setf (database-data db)
-	  (append (database-data db) (list project)))))
+	  (append (database-data db) (list project)))
+    project))
 
 (defmethod reload ((db opensource-database))
   (init db))
