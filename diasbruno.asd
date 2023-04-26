@@ -17,6 +17,7 @@
 	       #:diasbruno.opensource
 	       #:diasbruno.page
 	       #:diasbruno.page.index
-	       #:diasbruno.page.article)
+	       #:diasbruno.page.article
+	       #:diasbruno.page.opensource)
   :components ((:module "src"
 		:components ((:file "personal-site")))))

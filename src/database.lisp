@@ -4,7 +4,11 @@
    #:load-from-file
    #:database
    #:database-data
-   #:database-source))
+   #:database-source
+   #:create-item
+   #:save
+   #:write-to-file
+   #:reload))
 
 (in-package #:diasbruno.database)
 
@@ -17,11 +21,14 @@
 (defgeneric read-row (database row))
 (defgeneric write-row (database row))
 
-(defun write-to-file (destination database each-row)
+(defgeneric create-item (database &key))
+(defgeneric save (database))
+
+(defgeneric reload (database))
+
+(defun write-to-file (path content)
   (alexandria:write-string-into-file
-   (cl-json:encode-json-to-string
-    (mapcar (lambda (row) (funcall each-row row))
-	    posts))
-   source
+   content
+   path
    :if-exists :overwrite
    :if-does-not-exist :create))
