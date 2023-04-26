@@ -67,6 +67,15 @@
     (print (diasbruno.database:database-data db))
     post))
 
+(defmethod save ((db post-database))
+  (let ((posts (diasbruno.database:database-data db)))
+    (diasbruno.database:write-to-file
+     (database-source db)
+     (cl-json:encode-json-to-string
+      (mapcar (lambda (post)
+		(write-row db post))
+	      posts)))))
+
 (defun initialize-post-database (path)
   (let ((db (make-instance 'post-database :source path)))
     (init db)
