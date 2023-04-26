@@ -24,23 +24,24 @@
     (let ((spinneret:*html* rendered))
       (diasbruno.page:page-layout
 	(maphash (lambda (key projects-by-lang)
-		   (:div (list
-			  (:h5 key)
-			  (:div
-			   (dolist (project projects-by-lang)
-			     (with-slots (diasbruno.opensource::name
-					  diasbruno.opensource::url
-					  diasbruno.opensource::description
-					  diasbruno.opensource::language)
-				 project
-			       (:div :attrs (list :class "opensource-item")
-				     (list (:h3 (:a :href diasbruno.opensource::url
-						    :attrs (list :target "_blank")
-						    diasbruno.opensource::name))
-					   (:p diasbruno.opensource::description)
-					   (:p (:a :href diasbruno.opensource::url
-						   :attrs (list :target "_blank")
-						   diasbruno.opensource::url)))))))
+		   (:div :attrs (list :class "opensource-lang")
+			 (list
+			  (:h5 (:span key))
+			  (:div :attrs (list :class "opensource-lang-list")
+				(dolist (project projects-by-lang)
+				  (with-slots (diasbruno.opensource::name
+					       diasbruno.opensource::url
+					       diasbruno.opensource::description
+					       diasbruno.opensource::language)
+				      project
+				    (:div :attrs (list :class "opensource-item")
+					  (list (:h3 (:a :href diasbruno.opensource::url
+							 :attrs (list :target "_blank")
+							 diasbruno.opensource::name))
+						(:p diasbruno.opensource::description)
+						(:p (:a :href diasbruno.opensource::url
+							:attrs (list :target "_blank")
+							diasbruno.opensource::url)))))))
 			  (:hr))))
 		 projects)))))
 
