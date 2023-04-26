@@ -31,14 +31,6 @@
 (defclass post-database (diasbruno.database:database)
   ())
 
-(defmethod init ((db post-database))
-  (let ((data-from-json (with-open-file
-			    (file (diasbruno.database:database-source db))
-			  (cl-json:decode-json file))))
-    (setf (diasbruno.database:database-data db)
-	  (mapcar (lambda (row) (read-row db row))
-		  data-from-json))))
-
 (defmethod read-row ((db post-database) row)
   (destructuring-bind (title date status)
       row
@@ -54,6 +46,16 @@
 	       :format +iso-8601-format+))
     (:status . ,(change-case:lower-case (post-status row)))))
 
+(defmethod init ((db post-database))
+  (let ((data-from-json (with-open-file
+			    (file (diasbruno.database:database-source db))
+			  (cl-json:decode-json file))))
+    (setf (diasbruno.database:database-data db)
+	  (mapcar (lambda (row) (read-row db row))
+		  data-from-json))))
+
+(defmethod reload ((db post-database))
+  (init db))
 (defun initialize-post-database (path)
   (let ((db (make-instance 'post-database :source path)))
     (init db)
