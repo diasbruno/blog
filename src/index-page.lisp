@@ -28,7 +28,9 @@
 		(diasbruno.page:page-source page))))
     (diasbruno.page:write-page-to-file
      (index-page-renderer
-      (remove-if #'diasbruno.post:is-hidden posts))
+      (if (diasbruno.configuration:is-writing)
+	  posts
+	  (remove-if #'diasbruno.post:is-hidden posts)))
      (merge-pathnames "index.html"
 		      (str:concat (namestring diasbruno.configuration:*destination*)
 				  "/")))))

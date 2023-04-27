@@ -57,9 +57,12 @@
   ())
 
 (defmethod render ((page articles-page))
-  (let ((posts (remove-if #'diasbruno.post:is-hidden
-		(diasbruno.database:database-data
-		 (diasbruno.page:page-source page)))))
+  (let* ((posts-data (diasbruno.database:database-data
+		      (diasbruno.page:page-source page)))
+	 (posts (if (diasbruno.configuration:is-writing)
+		    posts-data
+		    (remove-if #'diasbruno.post:is-hidden
+			       posts-data))))
     (mapcar (lambda (post)
 	      (render (make-instance 'article-page :post post)))
 	    posts)))

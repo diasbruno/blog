@@ -5,9 +5,13 @@
    #:*destination*
    #:*database*
    #:*opensource*
-   #:*markdown-compiler*))
+   #:*markdown-compiler*
+   #:is-writing))
 
 (in-package #:diasbruno.configuration)
+
+(defvar *env*
+  :writing)
 
 (defvar *source*
   #P "/usr/local/src/site-content/contents/")
@@ -23,3 +27,6 @@
 
 (defvar *markdown-compiler*
   "/home/herospark/.local/bin/comrak")
+
+(defun is-writing ()
+  (equal :writing *env*))
