@@ -16,7 +16,10 @@
    #:article-datetime
    #:article-date
    #:article-content-filename
-   #:article-full-link))
+   #:article-full-link
+   #:create-item
+   #:reload
+   #:save))
 
 (in-package #:diasbruno.post)
 
