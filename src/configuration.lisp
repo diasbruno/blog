@@ -6,7 +6,12 @@
    #:*database*
    #:*opensource*
    #:*markdown-compiler*
-   #:is-writing))
+   #:is-writing
+   #:+iso-8601-format+
+   #:+YYYY-MM-DDTHH/MM/SS+
+   #:+YYYYMMDD+
+   #:+YYYYMMDDTHHMMSS+
+   #:+POST-DISPLAY-DATE+))
 
 (in-package #:diasbruno.configuration)
 
@@ -30,3 +35,24 @@
 
 (defun is-writing ()
   (equal :writing *env*))
+
+(defparameter +YYYY-MM-DDTHH/MM/SS+
+   (append local-time:+iso-8601-date-format+
+	  (list #\T)
+	  '((:hour 2) #\: (:min 2) #\: (:sec 2))
+	  (list :gmt-offset-or-z))
+  "iso-8601 without microseconds.")
+
+(defparameter +YYYYMMDD+
+  '((:year 4) #\/ (:month 2) #\/ (:day 2))
+  "RFC-3339 date time, but only date, for file system.")
+
+(defparameter +YYYYMMDDTHHMMSS+
+  (append
+   +YYYYMMDD+
+   '((:hour 2) (:min 2) (:sec 2)))
+  "RFC-3339 date time for file system.")
+
+(defparameter +POST-DISPLAY-DATE+
+ '(:short-month #\SPACE (:day 2) #\, #\SPACE (:year 4))
+  "Format used to display the date on a post - 'Mon 10, 2023'.")

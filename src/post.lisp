@@ -84,48 +84,37 @@
     (init db)
     db))
 
-(defparameter +iso-8601-time-no-usec-format+
-  '((:hour 2) #\: (:min 2) #\: (:sec 2)))
-
-(defparameter +iso-8601-format+
-  (append local-time:+iso-8601-date-format+
-	  (list #\T)
-	  +iso-8601-time-no-usec-format+
-	  (list :gmt-offset-or-z)))
-
-(defparameter +rfc3339-format/date-only/path+
-  '((:year 4) #\/ (:month 2) #\/ (:day 2)))
-
-(defparameter +fsdate-format+
-  '((:year 4) (:month 2) (:day 2) (:hour 2) (:min 2) (:sec 2)))
-
 (defun slugify (str)
   (change-case:lower-case
    (cl-slugify:string-to-slug str)))
 
 (defun date-to-uri-path (date)
-  (local-time:format-timestring nil
-				date
-				:format +rfc3339-format/date-only/path+))
+  (local-time:format-timestring
+   nil
+   date
+   :format diasbruno.configuration:+yyyymmdd+))
 
 (defun date-path-segment (date)
   (date-to-uri-path date))
 
 (defun article-datetime (post)
-  (local-time:format-timestring nil
-				(post-date post)
-				:format +iso-8601-format+))
+  (local-time:format-timestring
+   nil
+   (post-date post)
+   :format diasbruno.configuration:+yyyy-mm-ddthh/mm/ss+))
 
 (defun article-date (date)
-  (local-time:format-timestring nil
-				date
-				:format '(:short-month #\SPACE (:day 2) #\, #\SPACE (:year 4))))
+  (local-time:format-timestring
+   nil
+   date
+   :format diasbruno.configuration:+post-display-date+))
 
 (defun article-content-filename (post)
   (str:concat
-   (local-time:format-timestring nil
-				 (post-date post)
-				 :format +fsdate-format+)
+   (local-time:format-timestring
+    nil
+    (post-date post)
+    :format diasbruno.configuration:+yyyymmddthhmmss+)
    "-"
    (slugify (post-title post))
    ".md"))
