@@ -14,6 +14,7 @@
 	       #:diasbruno.configuration
 	       #:diasbruno.database
 	       #:diasbruno.post
+	       #:diasbruno.database.post
 	       #:diasbruno.opensource
 	       #:diasbruno.page
 	       #:diasbruno.page.index

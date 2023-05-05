@@ -15,8 +15,8 @@
 
 (in-package #:diasbruno.configuration)
 
-(defvar *env*
-  :writing)
+(defvar *env*)
+(setf *env* :publishing)
 
 (defvar *source*
   #P "/usr/local/src/site-content/contents/")
@@ -36,8 +36,17 @@
 (defun is-writing ()
   (equal :writing *env*))
 
+(defparameter +iso-8601-time-no-usec-format+
+  '((:hour 2) #\: (:min 2) #\: (:sec 2)))
+
+(defparameter +iso-8601-format+
+  (append local-time:+iso-8601-date-format+
+	  (list #\T)
+	  +iso-8601-time-no-usec-format+
+	  (list :gmt-offset-or-z)))
+
 (defparameter +YYYY-MM-DDTHH/MM/SS+
-   (append local-time:+iso-8601-date-format+
+  (append local-time:+iso-8601-date-format+
 	  (list #\T)
 	  '((:hour 2) #\: (:min 2) #\: (:sec 2))
 	  (list :gmt-offset-or-z))
@@ -48,9 +57,7 @@
   "RFC-3339 date time, but only date, for file system.")
 
 (defparameter +YYYYMMDDTHHMMSS+
-  (append
-   +YYYYMMDD+
-   '((:hour 2) (:min 2) (:sec 2)))
+  '((:year 4) (:month 2) (:day 2) (:hour 2) (:min 2) (:sec 2))
   "RFC-3339 date time for file system.")
 
 (defparameter +POST-DISPLAY-DATE+
