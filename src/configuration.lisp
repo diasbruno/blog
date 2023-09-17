@@ -1,37 +1,40 @@
 (defpackage #:diasbruno.configuration
   (:use #:cl)
   (:export
-   #:*source*
-   #:*destination*
-   #:*database*
-   #:*opensource*
    #:*markdown-compiler*
    #:is-writing
    #:+iso-8601-format+
    #:+YYYY-MM-DDTHH/MM/SS+
    #:+YYYYMMDD+
    #:+YYYYMMDDTHHMMSS+
-   #:+POST-DISPLAY-DATE+))
+   #:+POST-DISPLAY-DATE+
+   #:logging
+   #:environment
+   #:post-contents-path
+   #:opensource-json
+   #:markdown-compiler
+   #:switch-profile
+   #:destination-path))
 
 (in-package #:diasbruno.configuration)
 
-(defvar *env*)
-(setf *env* :publishing)
+(defvar *default-content-path* #P "~/Programming/site/contents/")
 
-(defvar *source*
-  #P "/usr/local/src/site-content/contents/")
+(chameleon:defconfig
+  (logging :debug
+           "log4cl log level.")
+  (environment :publishing
+               "what we are doing?")
+  (post-contents-path *default-content-path*
+                      "Path where are all markdown files?")
+  (destination-path #P"~/Programming/diasbruno.github.io/"
+                    "Where to write the files.")
+  (opensource-json (merge-pathnames #P"database.json" *default-content-path*)
+                   "JSON file containing the list of opensource projects.")
+  (markdown-compiler "comrak"
+                     "Markdown compiler."))
 
-(defvar *destination*
-  #P "/usr/local/src/diasbruno.github.io")
-
-(defvar *database*
-  (merge-pathnames #P"database.json" *source*))
-
-(defvar *opensource*
-  (merge-pathnames #P"opensource.json" *source*))
-
-(defvar *markdown-compiler*
-  "/home/herospark/.local/bin/comrak")
+(chameleon:defprofile :default)
 
 (defun is-writing ()
   (equal :writing *env*))
@@ -41,15 +44,15 @@
 
 (defparameter +iso-8601-format+
   (append local-time:+iso-8601-date-format+
-	  (list #\T)
-	  +iso-8601-time-no-usec-format+
-	  (list :gmt-offset-or-z)))
+          (list #\T)
+          +iso-8601-time-no-usec-format+
+          (list :gmt-offset-or-z)))
 
 (defparameter +YYYY-MM-DDTHH/MM/SS+
   (append local-time:+iso-8601-date-format+
-	  (list #\T)
-	  '((:hour 2) #\: (:min 2) #\: (:sec 2))
-	  (list :gmt-offset-or-z))
+          (list #\T)
+          '((:hour 2) #\: (:min 2) #\: (:sec 2))
+          (list :gmt-offset-or-z))
   "iso-8601 without microseconds.")
 
 (defparameter +YYYYMMDD+

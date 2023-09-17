@@ -32,7 +32,7 @@
 	  posts
 	  (remove-if #'diasbruno.post:is-hidden posts)))
      (merge-pathnames "index.html"
-		      (str:concat (namestring diasbruno.configuration:*destination*)
+		      (str:concat (namestring (diasbruno.configuration:destination-path))
 				  "/")))))
 
 (defun render-index-page (post-database)

@@ -7,33 +7,29 @@
    #:post-date
    #:post-title
    #:post-status
+   #:post-slug
    #:make-post
    #:is-hidden
-   #:initialize-post-database
-   #:slugify
    #:date-to-uri-path
    #:date-path-segment
    #:article-datetime
    #:article-date
    #:article-content-filename
    #:article-full-link
-   #:create-item
    #:reload
-   #:save))
+   #:save
+   #:article-filename-date))
 
 (in-package #:diasbruno.post)
 
 (defstruct post
-  date
   title
+  slug
+  date
   status)
 
 (defun is-hidden (post)
   (equal "hidden" (post-status post)))
-
-(defun slugify (str)
-  (change-case:lower-case
-   (cl-slugify:string-to-slug str)))
 
 (defun date-to-uri-path (date)
   (local-time:format-timestring
@@ -56,18 +52,21 @@
    date
    :format diasbruno.configuration:+post-display-date+))
 
+(defun article-filename-date (post)
+  (local-time:format-timestring
+   nil
+   (post-date post)
+   :format diasbruno.configuration:+yyyymmddthhmmss+))
+
 (defun article-content-filename (post)
   (str:concat
-   (local-time:format-timestring
-    nil
-    (post-date post)
-    :format diasbruno.configuration:+yyyymmddthhmmss+)
+   (article-filename-date post)
    "-"
-   (slugify (post-title post))
+   (post-slug post)
    ".md"))
 
 (defun article-full-link (post &optional (for-uri t))
   (str:concat (or (and for-uri "/") "") "articles/"
-	      (date-to-uri-path (post-date post))
-	      "/"
-	      (slugify (post-title post))))
+              (date-to-uri-path (post-date post))
+              "/"
+              (post-slug post)))

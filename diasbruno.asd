@@ -9,7 +9,6 @@
   :depends-on (#:str
 	       #:local-time
 	       #:cl-json
-	       #:cl-slugify
 	       #:spinneret
 	       #:diasbruno.configuration
 	       #:diasbruno.database
@@ -19,6 +18,4 @@
 	       #:diasbruno.page
 	       #:diasbruno.page.index
 	       #:diasbruno.page.article
-	       #:diasbruno.page.opensource)
-  :components ((:module "src"
-		:components ((:file "personal-site")))))
+	       #:diasbruno.page.opensource))

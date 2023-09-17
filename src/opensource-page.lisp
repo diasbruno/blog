@@ -52,7 +52,7 @@
      (opensource-page-renderer
       (group-by projects :fn #'diasbruno.opensource:opensource-language))
      (merge-pathnames "opensource/index.html"
-		      (str:concat (namestring diasbruno.configuration:*destination*)
+		      (str:concat (namestring (diasbruno.configuration:destination-path))
 				  "/")))))
 
 (defun render-opensource-page (opensource-database)
