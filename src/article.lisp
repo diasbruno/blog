@@ -16,7 +16,7 @@
 
 (defun render-article-content (post)
   (let ((command (str:concat
-                  diasbruno.configuration:*markdown-compiler*
+                  (diasbruno.configuration:markdown-compiler)
                   " --unsafe "
                   (namestring (article-filename post)))))
     (trivial-shell:shell-command command)))
