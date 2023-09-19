@@ -9,9 +9,9 @@ type Config = Map Text Text
 data Status = Publish | Hidden | Draft
     deriving (Eq, Show)
 
-type Metadata = Map String String
+type Metadata = (String, String, String)
 
-data Post = Post Text Text UTCTime Status Metadata
+data Post = Post Text Text UTCTime Status [Metadata]
     deriving (Eq, Show)
 
 publishable :: Post -> Bool

@@ -30,7 +30,7 @@ postURL (Post _ slug date _ _) =
 
 page :: [Post] -> H.Html
 page ps = H.html $ do
-    H.head (pageHeader (head ps))
+    H.head (pageHeader "diasbruno" mempty)
     H.body $ do
         H.main $ do
             pageNavigation

@@ -13,9 +13,8 @@ import qualified Text.Blaze.Html5.Attributes as A
 import Text.Blaze.Internal (MarkupM, stringValue, textValue)
 import Types
 
-pageHeader :: Post -> H.Html
-pageHeader (Post title slug date state meta) = do
-    let metas = M.toList meta
+pageHeader :: Text -> H.Html -> H.Html
+pageHeader title metadata = do
     H.title (H.text title)
     H.meta
         ! A.name "viewport"
@@ -26,13 +25,7 @@ pageHeader (Post title slug date state meta) = do
     H.meta
         ! A.name "title"
         ! A.content (textValue title)
-    forM_
-        metas
-        ( \(name, content) -> do
-            H.meta
-                ! A.name (stringValue name)
-                ! A.content (stringValue content)
-        )
+    metadata
     forM_
         [ "/css/style.css"
         , "/css/highlight.min.css"
