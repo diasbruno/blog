@@ -26,9 +26,13 @@ library
                     , PageLayout
                     , ArticlePage
                     , IndexPage
+                    , Feed
                     , Main
     build-depends:    base ^>=4.16.4.0
                     , ini
+                    , xml-types
+                    , xml-conduit
+                    , feed
                     , containers
                     , time
                     , process
