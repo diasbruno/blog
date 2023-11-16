@@ -24,6 +24,7 @@ library
                     , Configuration
                     , Types
                     , PageLayout
+                    , OpensourcePage
                     , ArticlePage
                     , IndexPage
                     , Feed

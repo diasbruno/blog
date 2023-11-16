@@ -4,6 +4,7 @@ import Types
 import Data
 import Configuration
 import Control.Monad
+import OpensourcePage
 import ArticlePage
 import IndexPage
 import Feed
@@ -14,3 +15,6 @@ main = do
   mapM_ (renderArticle c >=> print) filtered
   renderIndex c filtered >>= print
   renderFeed c posts
+  renderOss c oss
+  return ()
+  
