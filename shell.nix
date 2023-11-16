@@ -1,12 +1,10 @@
-{ nixpkgs ? import <nixpkgs> {}, compiler ? "default", doBenchmark ? false }:
-let
-  inherit (nixpkgs) pkgs;
-in pkgs.mkShell {
-  buildInputs = with pkgs; [zlib
-                            haskell.compiler.ghc928
-                            cabal-install
-                            haskell-language-server
-                            comrak
-                            haskellPackages.hoogle
-                            haskellPackages.fourmolu];
+let nixpkgs = import (fetchTarball("channel:nixos-23.05")) {};
+in nixpkgs.mkShell {
+  buildInputs = with nixpkgs; [zlib
+                               haskell.compiler.ghc928
+                               cabal-install
+                               haskell-language-server
+                               comrak
+                               haskellPackages.hoogle
+                               haskellPackages.fourmolu];
 }
