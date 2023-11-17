@@ -1,13 +1,14 @@
-{-# LANGUAGE OverloadedStrings  #-}
+{-# LANGUAGE OverloadedStrings #-}
+
 module File where
 
+import Configuration (contentPath)
 import Control.Monad (void)
+import qualified Data.Map as M
 import Data.Text
 import GHC.IO.Handle (hGetContents)
 import System.Process
 import Types
-import Configuration (contentPath)
-import qualified Data.Map as M
 
 compileMd :: Config -> String -> IO Text
 compileMd c file = do

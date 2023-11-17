@@ -1,20 +1,19 @@
 module Main where
 
-import Types
-import Data
+import ArticlePage
 import Configuration
 import Control.Monad
-import OpensourcePage
-import ArticlePage
-import IndexPage
+import Data
 import Feed
+import IndexPage
+import OpensourcePage
+import Types
 
 main = do
-  c <- loadConfig
-  let filtered = filter publishable posts
-  mapM_ (renderArticle c >=> print) filtered
-  renderIndex c filtered >>= print
-  renderFeed c posts
-  renderOss c oss
-  return ()
-  
+    c <- loadConfig
+    let filtered = filter publishable posts
+    mapM_ (renderArticle c >=> print) filtered
+    renderIndex c filtered >>= print
+    renderFeed c posts
+    renderOss c oss
+    return ()

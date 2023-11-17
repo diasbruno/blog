@@ -2,12 +2,14 @@
 
 module IndexPage where
 
-import Control.Monad (forM_)
-import Control.Monad (void)
+import Configuration (destinationPath)
+import qualified Control.Applicative as H
+import Control.Monad (forM_, void)
 import Data.Functor ((<&>))
 import Data.Ini
 import qualified Data.Map as M
-import Data.Text (Text, pack, unpack, toLower)
+import Data.Maybe (fromJust)
+import Data.Text (Text, pack, toLower, unpack)
 import qualified Data.Text.IO as TIO
 import Data.Time (defaultTimeLocale, formatTime, parseTimeOrError)
 import Date
@@ -20,9 +22,6 @@ import Text.Blaze.Html5 ((!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import Types
-import Data.Maybe (fromJust)
-import Configuration (destinationPath)
-import qualified Control.Applicative as H
 
 postURL :: Post -> Text
 postURL (Post _ slug date _ _) =
@@ -35,15 +34,19 @@ page ps = H.html $ do
         H.main $ do
             pageNavigation
             H.section ! A.class_ "content" $
-              forM_ ps (\p@(Post title slug date status meta) -> do
-                           H.div
-                             ! A.class_ "article-item" $ do
-                             H.a  (H.h1 (H.text title))
-                               ! A.href (H.textValue (postURL p))
-                             H.div $ do
-                               H.time (H.text (pack (postDate date)))
-                                 ! A.class_ "content-datetime"
-                                 ! A.datetime (H.stringValue (iso8601Date date)))
+                forM_
+                    ps
+                    ( \p@(Post title slug date status meta) -> do
+                        H.div
+                            ! A.class_ "article-item"
+                            $ do
+                                H.a (H.h1 (H.text title))
+                                    ! A.href (H.textValue (postURL p))
+                                H.div $ do
+                                    H.time (H.text (pack (postDate date)))
+                                        ! A.class_ "content-datetime"
+                                        ! A.datetime (H.stringValue (iso8601Date date))
+                    )
         H.script mempty
             ! A.type_ "application/javascript"
             ! A.src "/js/highlight.min.js"
