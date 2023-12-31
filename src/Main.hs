@@ -14,6 +14,6 @@ main = do
     let filtered = filter publishable posts
     mapM_ (renderArticle c >=> print) filtered
     renderIndex c filtered >>= print
-    renderFeed c posts
-    renderOss c oss
+    renderFeed c posts >>= print
+    renderOss c oss >>= print
     return ()
