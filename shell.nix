@@ -1,4 +1,4 @@
-let nixpkgs = import (fetchTarball("channel:nixos-23.05")) {};
+let nixpkgs = import (fetchTarball("channel:nixos-23.11")) {};
 in nixpkgs.mkShell {
   buildInputs = with nixpkgs; [zlib
                                haskell.compiler.ghc928
