@@ -13,6 +13,14 @@ fromString = parseTimeOrError True defaultTimeLocale "%Y-%m-%dT%H:%M:%SZ"
 posts :: [Post]
 posts =
     [ Post
+        "building pipelines and avoid suffering"
+        "building-pipelines-and-avoid-suffering"
+        (fromString "2023-12-30T22:34:58Z")
+        Publish
+        [ ("title", "og:title", "building pipelines and avoid suffering")
+        , ("image", "og:image", "/images/promises.png")
+        ]
+    , Post
         "problems when reexporting javascript modules"
         "problems-when-reexporting-javascript-modules"
         (fromString "2023-09-17T22:29:09Z")
