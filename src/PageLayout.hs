@@ -45,13 +45,13 @@ pageNavigation = H.nav $ do
         H.div
             ( do
                 H.a "articles"
-                    ! A.class_ "nav-links"
+                    ! A.class_ "nav-link"
                     ! A.href "/"
                 H.a "opensource"
-                    ! A.class_ "nav-links"
+                    ! A.class_ "nav-link"
                     ! A.href "/opensource"
                 H.a "github"
-                    ! A.class_ "nav-links"
+                    ! A.class_ "nav-link"
                     ! A.href "https://github.com/diasbruno"
                     ! A.target "_blank"
             )

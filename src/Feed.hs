@@ -59,5 +59,5 @@ renderFeed c ps =
             now <- getCurrentTime
             TIO.writeFile
                 (unpack fullFeedFilename)
-                (toStrict (fromJust $ Export.textFeedWith def{rsPretty = True} (AtomFeed (myFeed c ps now))))
+                (toStrict (fromJust $ Export.textFeedWith def (AtomFeed (myFeed c ps now))))
             return fullFeedFilename

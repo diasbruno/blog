@@ -12,7 +12,17 @@ fromString = parseTimeOrError True defaultTimeLocale "%Y-%m-%dT%H:%M:%SZ"
 
 posts :: [Post]
 posts =
-    [ Post
+  [
+    -- Post
+    --   "processes, errors and exceptions (part 1)"
+    --   "processes-errors-and-exceptions-part-1"
+    --     (fromString "2024-02-12T13:52:15Z")
+    --     Publish
+    --     [ ("title", "og:title", "processes-errors-and-exceptions-part-1")
+    --     , ("image", "og:image", "/images/processes-outcome.png")
+    --     ]
+    -- ,
+      Post
         "building pipelines and avoid suffering"
         "building-pipelines-and-avoid-suffering"
         (fromString "2023-12-30T22:34:58Z")

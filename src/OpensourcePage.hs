@@ -40,6 +40,7 @@ page content = H.html $ do
 
 renderProjects :: [(String, [Oss])] -> H.Html
 renderProjects oss =
+  H.div ! A.class_ "opensource-section" $ do
     forM_
         oss
         ( do

@@ -12,7 +12,7 @@ import Types
 
 compileMd :: Config -> String -> IO Text
 compileMd c file = do
-    let spec = proc "comrak" ["--unsafe", file]
+    let spec = proc "cmark-gfm" ["--unsafe", file]
     (_, Just hout, _, _) <-
         createProcess
             spec
