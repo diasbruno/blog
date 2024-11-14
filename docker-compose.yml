@@ -1,0 +1,8 @@
+services:
+  diasbruno:
+    image: haskell:9.2.8-slim
+    command: bash
+    volumes:
+      - /Users/dias/Programming/site:/usr/local/src/site
+      - /Users/dias/Programming/diasbruno.github.io:/usr/local/src/diasbruno.github.io
+
