@@ -31,9 +31,10 @@ library
                     , Main
     build-depends:    base ^>=4.16.4.0
                     , ini
+                    , aeson
                     , xml-types
                     , xml-conduit
-                    , feed
+                    , feed ==1.3.2.1
                     , containers
                     , time
                     , process

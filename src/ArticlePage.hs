@@ -64,15 +64,46 @@ toFile :: Post -> String
 toFile (Post title slug date status meta) =
     unpack (pack (fileDate date) <> "-" <> slug <> ".md")
 
+
+formatDateToString = formatTime defaultTimeLocale
+
 postURL :: Post -> Text
 postURL (Post _ slug date _ _) =
-    "/articles" <> pack (formatTime defaultTimeLocale "/%Y/%m/%d/" date) <> slug
+    "/articles" <> pack (formatDateToString "/%Y/%m/%d/" date) <> slug
+
+postContentURL :: Post -> Text
+postContentURL (Post _ slug date _ _) =
+  "/" <> pack (formatDateToString "%Y-%m-%d-" date) <> slug
 
 renderArticle :: Config -> Post -> IO Text
 renderArticle c p = do
     let dest = fromJust $ destinationPath c
     mkdir (unpack (dest <> postURL p))
-    let fullArticleFilename = dest <> postURL p <> "/index.html"
+    let filename = dest <> postURL p <> "/index.html"
     content <- compileMd c (toFile p)
-    TIO.writeFile (unpack fullArticleFilename) . pack $ renderHtml (page p content)
-    return fullArticleFilename
+    TIO.writeFile (unpack filename) . pack $ renderHtml (page p content)
+    return filename
+
+renderArticleMetadataJson :: Config -> Post -> IO Text
+renderArticleMetadataJson c p@(Post title slug date status _) = do
+    let dest = fromJust $ destinationPath c
+        url = postContentURL p
+    mkdir $ unpack (dest <> url)
+    let filename = dest <> url <> ".json"
+    let content = pack $ mconcat ["{",
+                   show "title",":", show title , ",",
+                   show "slug",":", show slug , ",",
+                   show "date",":", show (iso8601Date date), ",",
+                   show "status",":", show . Data.Text.toLower . pack $ show status,
+                   "}"]
+    TIO.writeFile (unpack filename) content
+    return filename
+
+renderArticleContent :: Config -> Post -> IO Text
+renderArticleContent c p = do
+    let dest = fromJust $ destinationPath c
+        url = postContentURL p
+    let filename = dest <> url <> ".html"
+    content <- compileMd c (toFile p)
+    TIO.writeFile (unpack filename) content
+    return filename
