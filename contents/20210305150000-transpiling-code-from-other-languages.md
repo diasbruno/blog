@@ -10,7 +10,7 @@ One good example to use this approach: enums.
 
 Input:
 
-```
+```python
 from enum import Enum
 
 class Color(Enum):
@@ -21,7 +21,7 @@ class Color(Enum):
 
 Output:
 
-```
+```typescript
 export default class Color {
     static RED = 1;
     static GREEN = 2;
@@ -31,7 +31,7 @@ export default class Color {
 
 I want to "avoid the problem" of having to change this file to update the enums by hand. So, all I have to do is run the script that (re)generate the entire file.
 
-```
+```python
 # yeah...it doesn't need to be pretty :)
 import ast
 
