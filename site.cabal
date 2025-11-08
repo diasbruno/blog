@@ -29,7 +29,7 @@ library
                     , IndexPage
                     , Feed
                     , Main
-    build-depends:    base ^>=4.16.4.0
+    build-depends:    base ^>=4.19.2.0
                     , ini
                     , aeson
                     , xml-types

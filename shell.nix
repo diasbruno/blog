@@ -1,7 +1,7 @@
-let nixpkgs = import (fetchTarball("channel:nixos-24.11")) {};
+let nixpkgs = import (fetchTarball("channel:nixos-25.05")) {};
 in nixpkgs.mkShell {
   buildInputs = with nixpkgs; [zlib
-                               haskellPackages.ghc_9_10_1
+                               haskellPackages.ghc
                                cabal-install
                                haskellPackages.lsp
                                comrak
