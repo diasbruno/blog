@@ -14,6 +14,41 @@ posts :: [Post]
 posts =
   [
     Post
+    "When you see `null`, ask yourself if that is your fault"
+    "https://diasbruno.substack.com/p/when-you-see-null-ask-yourself-if"
+    (fromString "2025-11-07T21:00:00Z")
+    Publish
+    []
+  ,
+    Post
+    "Redux and useReducer"
+    "https://diasbruno.substack.com/p/redux-e-usereducer"
+    (fromString "2024-11-01T12:00:00Z")
+    Publish
+    []
+  ,
+    Post
+    "LFE - Lisp for the BEAM (erlang/Elixir)"
+    "https://diasbruno.substack.com/p/lfe-lisp-for-the-beam-erlangelixir"
+    (fromString "2025-10-30T19:30:00Z")
+    Publish
+    []
+  ,
+    Post
+    "Tests comes first; coverage comes way later"
+    "https://diasbruno.substack.com/p/tests-comes-first-coverage-comes"
+    (fromString "2025-10-29T19:30:00Z")
+    Publish
+    []
+  ,
+    Post
+    "Arrows - Beautiful pipelines (Haskell - Typescript)"
+    "https://diasbruno.substack.com/p/arrows-beautiful-pipelines-haskell"
+    (fromString "2025-10-29T19:30:00Z")
+    Publish
+    []
+  ,
+    Post
     "Por que voc&ecirc; escreve const x = null || alternative"
     "por-que-voce-escreve-const-x-null-alternative"
         (fromString "2024-11-14T12:00:00Z")

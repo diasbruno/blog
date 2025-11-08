@@ -14,7 +14,7 @@ import Date (iso8601Date)
 import qualified Text.Atom.Feed as Atom
 import qualified Text.Feed.Export as Export (textFeedWith)
 import Text.Feed.Types
-import Text.XML (def, rsPretty)
+import Text.XML (def)
 import Types
 
 postURL :: Text -> Post -> Text

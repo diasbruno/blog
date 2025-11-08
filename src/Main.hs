@@ -56,13 +56,14 @@ indexed xs = go 0 xs
 renderArticleJsonPage :: Text -> Int -> (Int, [Post]) -> IO Text
 renderArticleJsonPage dest pages (index, chunk) = do
   let
-    toJSON (Post title slug date status _) = mconcat ["{",
-                                                      show "title",":", show title , ",",
-                                                      show "slug",":", show slug , ",",
-                                                      show "date",":", show (iso8601Date date), ",",
-                                                      show "status",":", show . Data.Text.toLower . pack $ show status,
-                                                      "}"
-                                                     ]
+    toJSON (Post title substackLink date status _) =
+      mconcat ["{",
+                show "title",":", show title , ",",
+                show "link",":", show substackLink , ",",
+                show "date",":", show (iso8601Date date), ",",
+                show "status",":", show . Data.Text.toLower . pack $ show status,
+                "}"
+              ]
     content = mconcat ["{",
                          show "page", ":", show (index + 1), ",",
                          show "number_of_pages", ":", show pages, ",",
@@ -83,9 +84,9 @@ renderArticleJsons c ps = do
 main = do
     c <- loadConfig
     let filtered = filter publishable posts
-    mapM_ (renderArticle c >=> print) filtered
-    mapM_ (renderArticleContent c >=> print) filtered
-    mapM_ (renderArticleMetadataJson c >=> print) filtered
+    -- mapM_ (renderArticle c >=> print) filtered
+    -- mapM_ (renderArticleContent c >=> print) filtered
+    -- mapM_ (renderArticleMetadataJson c >=> print) filtered
     renderArticleJsons c filtered
     -- renderIndex c filtered >>= print
     renderFeed c posts >>= print
