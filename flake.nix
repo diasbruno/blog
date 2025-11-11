@@ -2,7 +2,7 @@
   description = "diasbruno site flake";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs?ref=25.05";
+    nixpkgs.url = "github:nixos/nixpkgs?ref=24.11";
   };
 
   outputs = { self, nixpkgs, flake-utils }:
@@ -14,12 +14,13 @@
         devShell = pkgs.mkShell {
           name = "diasbruno_site";
           buildInputs = with pkgs; [zlib
-                                    haskell.compiler.ghc928
+                                    haskell.compiler.ghc98
                                     cabal-install
                                     haskell-language-server
                                     comrak
                                     haskellPackages.hoogle
                                     haskellPackages.fourmolu
+                                    python312
                                     bun
                                    ];
         };
