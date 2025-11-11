@@ -14,6 +14,13 @@ posts :: [Post]
 posts =
   [
     Post
+    "LFE - Lisp for the BEAM (erlang/Elixir) 2/N"
+    "https://diasbruno.substack.com/p/lfe-lisp-for-the-beam-erlangelixir-c87"
+    (fromString "2025-11-11T01:00:00Z")
+    Publish
+    []
+  ,
+    Post
     "When you see `null`, ask yourself if that is your fault"
     "https://diasbruno.substack.com/p/when-you-see-null-ask-yourself-if"
     (fromString "2025-11-07T21:00:00Z")
@@ -28,7 +35,7 @@ posts =
     []
   ,
     Post
-    "LFE - Lisp for the BEAM (erlang/Elixir)"
+    "LFE - Lisp for the BEAM (erlang/Elixir) 1/N"
     "https://diasbruno.substack.com/p/lfe-lisp-for-the-beam-erlangelixir"
     (fromString "2025-10-30T19:30:00Z")
     Publish

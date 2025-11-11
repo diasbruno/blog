@@ -88,7 +88,7 @@ main = do
     -- mapM_ (renderArticleContent c >=> print) filtered
     -- mapM_ (renderArticleMetadataJson c >=> print) filtered
     renderArticleJsons c filtered
-    -- renderIndex c filtered >>= print
+    renderIndex c filtered >>= print
     renderFeed c posts >>= print
     renderOss c oss >>= print
     return ()
