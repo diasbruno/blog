@@ -1,0 +1,33 @@
+@font-face {
+  font-family: Fraunces;
+  src: url("fraunces-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
+
+:root {
+  --paper: #f6f3ed;
+  --ink: #272320;
+  --quiet-ink: #675e55;
+  --paper-rule: #d4cdc2;
+  --charcoal: #202020;
+  --chalk: #ede9e2;
+  --quiet-chalk: #b9b3ac;
+  --charcoal-rule: #66605a;
+
+  --experiments: #d19a97;
+  --posts: #d4a17a;
+  --projects: #d6bb76;
+  --about: #9dbdce;
+  --experiments-ink: #843e3d;
+  --posts-ink: #81441f;
+  --projects-ink: #6d5415;
+  --about-ink: #315d78;
+
+  --serif: Fraunces, Georgia, serif;
+  --sans: system-ui, sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Consolas, monospace;
+  --page-width: 69rem;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+}
