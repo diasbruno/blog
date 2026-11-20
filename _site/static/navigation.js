@@ -47,7 +47,7 @@ async function navigate(url, { traverse = false } = {}) {
     window.clearTimeout(timer);
     timer = undefined;
     let startLanding;
-    await transitionPage(() => {
+    await transitionPage(documentPage, () => {
       if (!traverse) window.history.pushState(null, "", url);
       currentPath = path;
       document.title = page.title;

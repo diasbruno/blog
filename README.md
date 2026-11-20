@@ -34,9 +34,8 @@ the JSON request fails. Archived articles and the open-source directory also
 have JSON companions and continue to open as standalone pages.
 
 The landing uses the signature reveal from the original site, followed by
-staggered menu links. Each navigation between the new layouts randomly picks
-the original seven-color columns, alternating horizontal bands, or a diagonal
-tile cascade. Reduced motion skips the landing reveal and the page transitions.
+staggered menu links. Navigation between the new layouts fades out the current
+page and fades in the next one. Reduced motion skips both effects.
 
 When publishing from the branch, include the generated homepage, section
 indexes, JSON companions, `assets/site/`, and `.site-generated.json` in the

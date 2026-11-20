@@ -1,45 +1,6 @@
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
-const colors = ["#64b4dc", "#e67896", "#5ac88c", "#fac85a", "#f08c5a", "#dc4646", "#aa78e6"];
 const easeIn = "cubic-bezier(.55,.085,.68,.53)";
 const easeInOut = "cubic-bezier(.455,.03,.515,.955)";
-
-const tileColumns = 5;
-const tileRows = 3;
-const transitions = [
-  {
-    name: "columns",
-    columns: colors.length,
-    rows: 1,
-    scale: "scaleY",
-    duration: 1000,
-    easing: easeIn,
-    origin: (_, reveal) => reveal ? "bottom" : "top",
-    delay: index => index * 50,
-  },
-  {
-    name: "bands",
-    columns: 1,
-    rows: colors.length,
-    scale: "scaleX",
-    duration: 720,
-    easing: easeInOut,
-    origin: (index, reveal) => (index % 2 === 0) !== reveal ? "left" : "right",
-    delay: index => index * 45,
-  },
-  {
-    name: "tiles",
-    columns: tileColumns,
-    rows: tileRows,
-    scale: "scale",
-    duration: 420,
-    easing: easeInOut,
-    origin: () => "center",
-    delay: (index, reveal) => {
-      const diagonal = Math.floor(index / tileColumns) + index % tileColumns;
-      return (reveal ? tileColumns + tileRows - 2 - diagonal : diagonal) * 55;
-    },
-  },
-];
 
 function canAnimate() {
   return !reducedMotion.matches && !document.hidden && typeof Element.prototype.animate === "function";
@@ -134,67 +95,61 @@ export function prepareLanding(signal) {
   };
 }
 
-async function movePanels(panels, transition, reveal, signal) {
-  if (!canAnimate() || signal.aborted) return;
-
-  const start = `${transition.scale}(${reveal ? 1 : 0})`;
-  const end = `${transition.scale}(${reveal ? 0 : 1})`;
-  const animations = panels.map((panel, index) => {
-    panel.style.transformOrigin = transition.origin(index, reveal);
-    return panel.animate([{ transform: start }, { transform: end }], {
-      duration: transition.duration,
-      delay: transition.delay(index, reveal),
-      easing: transition.easing,
-      fill: "both",
-    });
-  });
+async function waitForFade(animations, signal) {
   function finish() {
     for (const animation of animations) animation.finish();
   }
+
   function cancel() {
     for (const animation of animations) animation.cancel();
   }
+
   signal.addEventListener("abort", cancel, { once: true });
   reducedMotion.addEventListener("change", finish, { once: true });
   document.addEventListener("visibilitychange", finish, { once: true });
   try {
     await Promise.allSettled(animations.map(animation => animation.finished));
-    for (const panel of panels) panel.style.transform = end;
   } finally {
-    cancel();
     signal.removeEventListener("abort", cancel);
     reducedMotion.removeEventListener("change", finish);
     document.removeEventListener("visibilitychange", finish);
   }
 }
 
-export async function transitionPage(render, signal) {
+export async function transitionPage(page, render, signal) {
+  if (signal.aborted) return;
   if (!canAnimate()) {
-    if (!signal.aborted) render();
+    render();
     return;
   }
 
-  const transition = transitions[Math.floor(Math.random() * transitions.length)];
-  const curtain = document.createElement("div");
-  curtain.className = "page-transition";
-  curtain.dataset.transition = transition.name;
-  curtain.setAttribute("aria-hidden", "true");
-  curtain.style.setProperty("--columns", transition.columns);
-  curtain.style.setProperty("--rows", transition.rows);
-  const panels = Array.from({ length: transition.columns * transition.rows }, (_, index) => {
-    const panel = document.createElement("span");
-    panel.style.backgroundColor = colors[index % colors.length];
-    return panel;
+  const body = document.body;
+  const oldBackground = getComputedStyle(body).backgroundColor;
+  const outgoing = page.animate([{ opacity: 1 }, { opacity: 0 }], {
+    duration: 120,
+    easing: "ease-in",
+    fill: "forwards",
   });
-  curtain.append(...panels);
-  document.body.append(curtain);
-
+  const incoming = [];
   try {
-    await movePanels(panels, transition, false, signal);
+    await waitForFade([outgoing], signal);
     if (signal.aborted) return;
     render();
-    await movePanels(panels, transition, true, signal);
+    if (!canAnimate()) return;
+
+    const options = { duration: 180, easing: "ease-out", fill: "backwards" };
+    incoming.push(page.animate([{ opacity: 0 }, { opacity: 1 }], options));
+    const newBackground = getComputedStyle(body).backgroundColor;
+    if (oldBackground !== newBackground) {
+      incoming.push(body.animate(
+        [{ backgroundColor: oldBackground }, { backgroundColor: newBackground }],
+        options,
+      ));
+    }
+    outgoing.cancel();
+    await waitForFade(incoming, signal);
   } finally {
-    curtain.remove();
+    outgoing.cancel();
+    for (const animation of incoming) animation.cancel();
   }
 }
