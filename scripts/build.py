@@ -19,7 +19,7 @@ from urllib.parse import urljoin, urlsplit
 import xml.etree.ElementTree as ET
 
 SOURCE = Path(__file__).resolve().parents[1]
-ROOT = Path(os.environ.get("SITE_DESTINATION", SOURCE.parent.parent / "diasbruno.github.io")).expanduser().resolve()
+ROOT = Path(os.environ.get("SITE_DESTINATION", SOURCE.parent / "diasbruno.github.io")).expanduser().resolve()
 MANIFEST = ROOT / ".site-generated.json"
 ASSET_ROOT = "assets/site"
 SITE_URL = "https://diasbruno.github.io"
@@ -650,11 +650,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--clean", action="store_true")
     args = parser.parse_args()
-    if ROOT == SOURCE.parent:
+    if ROOT == SOURCE:
         raise ValueError("Use the publishing checkout as the build destination.")
     if not ROOT.is_dir():
         raise ValueError(f"Build destination does not exist: {ROOT}")
-    with (SOURCE.parent / "Makefile").open() as lock:
+    with (SOURCE / "Makefile").open() as lock:
         fcntl.flock(lock, fcntl.LOCK_EX)
         if args.clean:
             clean()

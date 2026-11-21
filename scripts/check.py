@@ -8,7 +8,7 @@ from build import ROOT, SOURCE, digest, generate, owned_path, recorded_outputs
 
 
 def main():
-    with (SOURCE.parent / "Makefile").open() as lock:
+    with (SOURCE / "Makefile").open() as lock:
         fcntl.flock(lock, fcntl.LOCK_SH)
         expected, archived, unavailable = generate()
         recorded = recorded_outputs()

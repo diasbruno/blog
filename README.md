@@ -1,9 +1,12 @@
 # Bruno Dias’s website
 
-Run the build from this source checkout. Editable site files are under
-`_site/`. The build writes HTML and public assets to the root of the sibling
-`diasbruno.github.io` checkout. With the standard local folder layout, that
-destination is `/Users/dias/Programming/diasbruno.github.io`.
+Run the build from the repository root. The Python build scripts are in
+`scripts/`, with the site content in `content/`, assets in `static/`, and HTML
+templates in `templates/`. The build writes HTML and public assets to the
+root of the sibling `diasbruno.github.io` checkout. With the standard local
+folder layout, that is `/Users/dias/Programming/diasbruno.github.io`.
+
+The [previous Haskell version](legacy/) is archived under `legacy/`.
 
 ## Local development
 
@@ -22,13 +25,13 @@ publishing checkout with its legacy files. There are no Python packages to insta
 Set `DESTINATION` on a Make command to target a different publishing checkout,
 for example `make build DESTINATION=/tmp/site-preview`.
 
-Edit section content under `_site/content/`, layouts under `_site/templates/`,
-and the styles and signature under `_site/static/`. Fraunces is self-hosted under
+Edit section content under `content/`, layouts under `templates/`,
+and the styles and signature under `static/`. Fraunces is self-hosted under
 the SIL Open Font License included with the font.
 
-Edit the shared footer in `_site/templates/footer.html`. The build includes it in
-Experiments, Posts, Projects, About, and all local article pages. The build
-inserts marked footer blocks into the open-source directory.
+Edit the shared footer in `templates/footer.html`. The build includes it on
+public section and article pages and inserts marked footer blocks into the
+open-source directory.
 
 Each page has a complete HTML document at its normal URL and a companion
 `content.json` in the same directory. The JSON contains the page path, title,
@@ -47,22 +50,22 @@ indexes, JSON companions, `assets/site/`, and `.site-generated.json` in the
 publishing checkout.
 Legacy styles and images and the open-source directory already live there.
 Edit post metadata and bodies in the `posts` table in
-`_site/content/posts.sqlite3`. Set `status` to `publish`, `draft`, or `hidden`.
+`content/posts.sqlite3`. Set `status` to `publish`, `draft`, or `hidden`.
 The build publishes only `publish` entries and uses the same selection for the
 Posts index, Atom feed, legacy JSON indexes, and historical redirect pages.
 Markdown bodies are rendered with `cmark-gfm`.
 Imported Substack posts use their source dates and link back to the originals
-from the article sidebar. Their images live in `_site/static/substack/`, so local
+from the article sidebar. Their images live in `static/substack/`, so local
 builds and previews use the saved copies.
 The build restores additional historical URLs through
-`_site/content/post-redirects.json`.
+`content/post-redirects.json`.
 
-Edit the Projects index and organization links in `_site/content/projects.json`.
-Project pages are written in Markdown under `_site/content/projects/`, with
-repository artwork under `_site/static/projects/`.
+Edit the Projects index and organization links in `content/projects.json`.
+Project pages are written in Markdown under `content/projects/`, with
+repository artwork under `static/projects/`.
 
-Edit the About bio in `_site/content/about.md` and its introduction in
-`_site/content/sections.json`.
+Edit the About bio in `content/about.md` and its introduction in
+`content/sections.json`.
 
-The Verona language section at `/vrn/` uses `_site/content/vrn.md` for its body
-and `_site/content/sections.json` for its introduction and links.
+The Verona language section at `/vrn/` uses `content/vrn.md` for its body
+and `content/sections.json` for its introduction and links.

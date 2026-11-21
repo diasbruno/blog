@@ -7,13 +7,13 @@ export SITE_DESTINATION = $(DESTINATION)
 all: build
 
 build:
-	$(PYTHON) _site/scripts/build.py
+	$(PYTHON) scripts/build.py
 
 serve: build
-	$(PYTHON) _site/scripts/serve.py --port $(PORT)
+	$(PYTHON) scripts/serve.py --port $(PORT)
 
 check:
-	$(PYTHON) _site/scripts/check.py
+	$(PYTHON) scripts/check.py
 
 clean:
-	$(PYTHON) _site/scripts/build.py --clean
+	$(PYTHON) scripts/build.py --clean
