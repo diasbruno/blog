@@ -56,3 +56,7 @@ from the article sidebar. Their images live in `_site/static/substack/`, so loca
 builds and previews use the saved copies.
 The build restores additional historical URLs through
 `_site/content/post-redirects.json`.
+
+Edit the Projects index and organization links in `_site/content/projects.json`.
+Project pages are written in Markdown under `_site/content/projects/`, with
+repository artwork under `_site/static/projects/`.

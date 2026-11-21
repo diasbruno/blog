@@ -187,19 +187,40 @@ def render(name, **values):
     return Template((SOURCE / "templates" / f"{name}.html").read_text(encoding="utf-8")).substitute(values)
 
 
+def markdown_body(body, name):
+    # Trusted local Markdown includes the original posts' iframe markup.
+    try:
+        return subprocess.run(
+            ["cmark-gfm", "--unsafe"], input=body, check=True, capture_output=True, encoding="utf-8",
+        ).stdout
+    except FileNotFoundError as error:
+        raise ValueError("Install cmark-gfm to render the site’s Markdown.") from error
+    except subprocess.CalledProcessError as error:
+        raise ValueError(f"Could not render {name}: {error.stderr.strip()}") from error
+
+
+def article_headings(body):
+    return re.sub(r"<(/?)h1(?=[\s>])", r"<\1h2", body)
+
+
 def post_body(post):
     body = post["body"]
     if post["body_format"] == "markdown":
-        # Trusted local Markdown includes the original posts' iframe markup.
-        try:
-            body = subprocess.run(
-                ["cmark-gfm", "--unsafe"], input=body, check=True, capture_output=True, encoding="utf-8",
-            ).stdout
-        except FileNotFoundError as error:
-            raise ValueError("Install cmark-gfm to render the site’s Markdown posts.") from error
-        except subprocess.CalledProcessError as error:
-            raise ValueError(f'Could not render {post["slug"]}: {error.stderr.strip()}') from error
-    return re.sub(r"<(/?)h1(?=[\s>])", r"<\1h2", body)
+        body = markdown_body(body, post["slug"])
+    return article_headings(body)
+
+
+def render_links(links, *, enhance=False):
+    rows = []
+    for label, href in links:
+        url = urlsplit(href)
+        external = url.scheme == "https" and url.netloc
+        local = href.startswith("/") and not href.startswith("//")
+        if not label.strip() or not (external or local):
+            raise ValueError(f"Invalid navigation link: {href}")
+        marker = " data-site-navigation" if enhance and local else ""
+        rows.append(f'<li><a href="{escape(href)}"{marker}>{escape(label)}</a></li>')
+    return "\n".join(rows)
 
 
 def render_post(post, catalog):
@@ -208,10 +229,6 @@ def render_post(post, catalog):
     links.extend((catalog[slug]["title"], f"/posts/{slug}/") for slug in post["related"] if slug in catalog)
     if post.get("source_url"):
         links.append(("Original on Substack" if english else "Original no Substack", post["source_url"]))
-    rows = []
-    for title, href in links:
-        marker = " data-site-navigation" if href.startswith("/posts/") else ""
-        rows.append(f'<li><a href="{escape(href)}"{marker}>{escape(title)}</a></li>')
     note = post.get("archive_note")
     subtitle = post.get("description")
     return render(
@@ -224,7 +241,7 @@ def render_post(post, catalog):
         body=post_body(post),
         note=f'<p class="archive-note">{escape(note)}</p>' if note else "",
         article_label="Article" if english else "Artigo",
-        links="\n".join(rows),
+        links=render_links(links, enhance=True),
     )
 
 
@@ -278,6 +295,81 @@ def archive_pages(legacy, *, footer=None):
     return pages
 
 
+def load_projects():
+    source = SOURCE / "content" / "projects.json"
+    data = json.loads(source.read_text(encoding="utf-8"))
+    slugs = set()
+    for project in data["projects"]:
+        slug = project["slug"]
+        if not re.fullmatch(r"[a-z0-9]+(?:-[a-z0-9]+)*", slug) or slug in slugs:
+            raise ValueError(f"Invalid or duplicate project slug: {slug}")
+        slugs.add(slug)
+        if not project["title"].strip() or not project["description"].strip() or not project["technologies"]:
+            raise ValueError(f"Missing project metadata: {slug}")
+        image = project.get("image")
+        if image and not re.fullmatch(r"[a-z0-9-]+\.(?:png|jpg|webp)", image):
+            raise ValueError(f"Invalid project image: {image}")
+    return data
+
+
+def project_list(data):
+    rows = []
+    for project in data["projects"]:
+        image = project.get("image")
+        thumbnail = (
+            f'<img src="/{ASSET_ROOT}/projects/{image}" alt="">'
+            if image else f'<code>{escape(project["mark"])}</code>'
+        )
+        rows.append(render(
+            "project-row",
+            slug=project["slug"],
+            title=escape(project["title"]),
+            description=escape(project["description"]),
+            technologies=escape(" · ".join(project["technologies"])),
+            thumbnail=thumbnail,
+        ))
+    organizations = []
+    for name, description, url in data["organizations"]:
+        address = urlsplit(url)
+        if not name.strip() or address.scheme != "https" or address.netloc != "github.com":
+            raise ValueError(f"Invalid GitHub organization: {url}")
+        detail = f"<p>{escape(description)}</p>" if description else ""
+        organizations.append(f'<li><a href="{escape(url)}">{escape(name)}</a>{detail}</li>')
+    return render("project-list", projects="\n".join(rows), organizations="\n".join(organizations))
+
+
+def project_pages(data, footer, public_posts):
+    pages = {}
+    header = render("header", navigation=navigation("projects", current_kind="location"))
+    for project in data["projects"]:
+        slug = project["slug"]
+        route = f"/projects/{slug}/"
+        source = SOURCE / "content" / "projects" / f"{slug}.md"
+        body = article_headings(markdown_body(source.read_text(encoding="utf-8"), slug))
+        links = [
+            (label, href) for label, href in project["links"]
+            if not href.startswith("/posts/") or href.removeprefix("/posts/").rstrip("/") in public_posts
+        ]
+        links.append(("All projects", "/projects/"))
+        details = project["technologies"]
+        if project.get("role"):
+            details = [project["role"], *details]
+        title = escape(project["title"])
+        description = escape(project["description"])
+        content = render(
+            "project", title=title, description=description, technologies=escape(" · ".join(details)),
+            body=body, links=render_links(links, enhance=True),
+        )
+        pages[route[1:] + "index.html"] = render(
+            "base",
+            title=f"{title} · Bruno Dias", description=description, theme="light", language="en",
+            metadata=f'  <link rel="canonical" href="{SITE_URL}{route}" data-project-metadata>',
+            header=header, content=content, json_url=route + "content.json",
+            intro_script="", footer=footer,
+        )
+    return pages
+
+
 def generate(catalog=None):
     if catalog is None:
         catalog = load_posts()
@@ -318,29 +410,21 @@ def generate(catalog=None):
     section_content = json.loads((SOURCE / "content" / "sections.json").read_text(encoding="utf-8"))
     if section_content.keys() != SECTIONS.keys():
         raise ValueError("Section content must match the site navigation")
+    projects = load_projects()
     footer = render("footer", modifier="")
     for name, (heading, theme) in SECTIONS.items():
         entry = section_content[name]
         if not entry["intro"].strip():
             raise ValueError(f"Missing {name} introduction")
         intro = escape(entry["intro"])
-        links = entry.get("links", [])
-        rows = []
-        for label, href in links:
-            url = urlsplit(href)
-            external = url.scheme == "https" and url.netloc
-            local = href.startswith("/") and not href.startswith("//")
-            if not label.strip() or not (external or local):
-                raise ValueError(f"Invalid {name} link: {href}")
-            rows.append(f'<li><a href="{escape(href)}">{escape(label)}</a></li>')
-
-        body = ""
+        rows = render_links(entry.get("links", []))
+        body = '<ul class="section-links">\n' + rows + "\n</ul>" if rows else ""
         if name == "posts":
             body = post_list(ordered)
-        elif rows:
-            body = '<ul class="section-links">\n' + "\n".join(rows) + "\n</ul>"
-            if name == "about":
-                body = render("about-links", links=body)
+        elif name == "projects":
+            body = project_list(projects) + body
+        elif name == "about":
+            body = render("about-links", links=body)
         page = f"{name}/index.html"
         outputs[page] = render(
             "base",
@@ -376,6 +460,7 @@ def generate(catalog=None):
                 footer=footer,
             )
 
+    outputs.update(project_pages(projects, footer, public))
     for page, html in tuple(outputs.items()):
         outputs[content_path(page)] = companion(page, html)
     archived = archive_pages(legacy, footer=render("footer", modifier=" site-footer--archive"))
@@ -446,10 +531,10 @@ def owned_path(name):
     pages = {"index.html"} | {f"{section}/index.html" for section in SECTIONS}
     companions = {content_path(page) for page in pages} | {"opensource/content.json"}
     article = re.fullmatch(r"articles/\d{4}/\d{2}/\d{2}/[a-z0-9-]+/content\.json", name)
-    post = re.fullmatch(r"posts/[a-z0-9-]+/(?:index\.html|content\.json)", name)
+    detail = re.fullmatch(r"(?:posts|projects)/[a-z0-9-]+/(?:index\.html|content\.json)", name)
     redirect = ARTICLE_REDIRECT.fullmatch(name) and name not in legacy_paths()
     asset = PurePosixPath(ASSET_ROOT) in path.parents
-    if name not in pages | companions and name not in POST_INDEXES and not (article or post or redirect or asset):
+    if name not in pages | companions and name not in POST_INDEXES and not (article or detail or redirect or asset):
         raise ValueError(f"Generated path outside site outputs: {name}")
     target = ROOT / path
     if target.resolve() != target:

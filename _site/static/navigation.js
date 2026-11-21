@@ -4,6 +4,7 @@ import { prepareLanding, transitionPage } from "./motion.js";
 const documentPage = document.querySelector("#site-page");
 const description = document.querySelector('meta[name="description"]');
 const alternate = document.querySelector('link[type="application/json"]');
+const pageMetadata = "[data-post-metadata], [data-project-metadata]";
 const scrollPositions = new Map();
 let activeRequest;
 let currentPath = pagePath(location);
@@ -55,8 +56,8 @@ async function navigate(url, { traverse = false } = {}) {
       document.body.className = page.body.className;
       description.content = page.querySelector('meta[name="description"]')?.content || "";
       alternate.href = path + "content.json";
-      for (const tag of document.head.querySelectorAll("[data-post-metadata]")) tag.remove();
-      document.head.append(...page.head.querySelectorAll("[data-post-metadata]"));
+      for (const tag of document.head.querySelectorAll(pageMetadata)) tag.remove();
+      document.head.append(...page.head.querySelectorAll(pageMetadata));
       documentPage.replaceChildren(...content.childNodes);
       for (const link of navigationPaths(documentPage)) knownPaths.add(link);
       window.scrollTo(0, traverse ? scrollPositions.get(path) || 0 : 0);

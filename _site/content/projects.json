@@ -1,0 +1,74 @@
+{
+  "projects": [
+    {
+      "slug": "verona",
+      "title": "Verona",
+      "description": "A statically typed systems language with S-expressions, native compilation, and explicit C interoperability.",
+      "technologies": ["Verona", "LLVM", "C"],
+      "role": "Contributor",
+      "image": "verona.png",
+      "links": [
+        ["Repository", "https://github.com/verona-project/verona"],
+        ["Project website", "https://verona-project.github.io/"],
+        ["Command-line reference", "https://github.com/verona-project/verona/blob/HEAD/docs/command-line.org"]
+      ]
+    },
+    {
+      "slug": "contexir",
+      "title": "Contexir",
+      "description": "Context-oriented programming for Elixir. Activate layers to refine function behavior in the current BEAM process.",
+      "technologies": ["Elixir", "BEAM"],
+      "image": "contexir.png",
+      "links": [
+        ["Repository", "https://github.com/diasbruno/contexir"],
+        ["Documentation", "https://contexir.hexdocs.pm/"],
+        ["Hex package", "https://hex.pm/packages/contexir"]
+      ]
+    },
+    {
+      "slug": "wst",
+      "title": "WST",
+      "description": "Common Lisp tools for building web applications from composable routes, handlers, and middleware.",
+      "technologies": ["Common Lisp", "HTTP"],
+      "image": "wst.png",
+      "links": [
+        ["Repository", "https://github.com/cl-sdk/io.github.cl-sdk.wst"],
+        ["Bookmark app example", "https://github.com/cl-sdk/wst-bookmark-example"],
+        ["Common Lisp SDK", "https://github.com/cl-sdk"]
+      ]
+    },
+    {
+      "slug": "meta-definitions",
+      "title": "Meta-definitions",
+      "description": "Define a Common Lisp domain type once and derive classes, validation, and related types from its metadata.",
+      "technologies": ["Common Lisp", "Code generation"],
+      "mark": "meta:define",
+      "links": [
+        ["Repository", "https://github.com/cl-sdk/meta-definitions"],
+        ["Related project · DomainDSL", "https://github.com/cl-sdk/domaindsl"],
+        ["Common Lisp SDK", "https://github.com/cl-sdk"]
+      ]
+    },
+    {
+      "slug": "arr",
+      "title": "arr",
+      "description": "Common Lisp background workers with interfaces for scheduling tasks and plugging in queue storage.",
+      "technologies": ["Common Lisp", "Background jobs"],
+      "image": "arr.png",
+      "links": [
+        ["Repository", "https://github.com/cl-sdk/arr"],
+        ["Related post · Arrows and pipelines", "/posts/arrows-beautiful-pipelines-haskell/"],
+        ["Common Lisp SDK", "https://github.com/cl-sdk"]
+      ]
+    }
+  ],
+  "organizations": [
+    ["cl-sdk", "Common Lisp libraries and application tooling.", "https://github.com/cl-sdk"],
+    ["js-sdk", "JavaScript libraries.", "https://github.com/js-sdk"],
+    ["c-sdk", "Tools for C development.", "https://github.com/c-sdk"],
+    ["clibs", "The clib package manager and C packages.", "https://github.com/clibs"],
+    ["Natal JS", "JavaScript developer community in Rio Grande do Norte, Brazil.", "https://github.com/NatalJS"],
+    ["cs-sdk", "", "https://github.com/cs-sdk"],
+    ["hs-sdk", "", "https://github.com/hs-sdk"]
+  ]
+}

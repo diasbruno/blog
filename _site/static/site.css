@@ -213,6 +213,100 @@ nav a[aria-current] {
   text-underline-offset: .16em;
 }
 
+.project-list,
+.organization-list {
+  max-width: 54rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.project-list {
+  display: grid;
+  gap: .75rem;
+}
+
+.project-row {
+  display: grid;
+  grid-template-columns: clamp(4.25rem, 13vw, 6.5rem) minmax(0, 1fr) auto;
+  align-items: center;
+  gap: clamp(.9rem, 3vw, 1.75rem);
+  border: 1px solid var(--rule);
+  padding: clamp(.75rem, 2vw, 1.125rem);
+  text-decoration: none;
+}
+
+.project-row:hover { border-color: var(--projects-ink); }
+.project-row:hover h2 { text-decoration: underline; text-underline-offset: .14em; }
+
+.project-thumbnail {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--charcoal);
+  color: #d6bb76;
+}
+
+.project-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.project-thumbnail code { font: .65rem var(--mono); }
+
+.project-row h2,
+.project-organizations h2 {
+  margin: 0;
+  font: 400 clamp(1.4rem, 3vw, 1.85rem)/1.2 var(--serif);
+}
+
+.project-row p {
+  max-width: 54ch;
+  margin: .35rem 0 0;
+  color: var(--quiet);
+}
+
+.project-row .project-technologies,
+.project-detail .project-technologies {
+  color: var(--quiet);
+  font: .75rem/1.5 var(--mono);
+}
+
+.project-arrow { color: var(--projects-ink); }
+
+.project-organizations { margin-block: 3rem 1.75rem; }
+
+.organization-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 2rem;
+  margin-block-start: 1.2rem;
+}
+
+.organization-list li {
+  padding-block: .7rem;
+  border-top: 1px solid var(--rule);
+}
+
+.organization-list a {
+  font-weight: 600;
+  text-underline-offset: .18em;
+}
+
+.organization-list p {
+  margin: .16rem 0 0;
+  color: var(--quiet);
+  font-size: .9rem;
+}
+
+.project-organizations + .section-links {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 .post-columns {
   display: grid;
   grid-template-columns: minmax(0, 44rem) minmax(9rem, 1fr);
@@ -317,6 +411,9 @@ nav a[aria-current] {
 @media (max-width: 35rem) {
   .site-header nav { flex-basis: 100%; }
   .post-list li { grid-template-columns: 1fr; row-gap: .35rem; }
+  .project-row { grid-template-columns: clamp(4.25rem, 19vw, 5.5rem) minmax(0, 1fr); }
+  .project-arrow { display: none; }
+  .organization-list { grid-template-columns: minmax(0, 1fr); }
   .post-columns { grid-template-columns: minmax(0, 1fr); }
   .post-links { position: static; }
 }
