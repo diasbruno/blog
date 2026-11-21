@@ -60,3 +60,6 @@ The build restores additional historical URLs through
 Edit the Projects index and organization links in `_site/content/projects.json`.
 Project pages are written in Markdown under `_site/content/projects/`, with
 repository artwork under `_site/static/projects/`.
+
+Edit the About bio in `_site/content/about.md` and its introduction in
+`_site/content/sections.json`.

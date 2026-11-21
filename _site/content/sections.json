@@ -1,6 +1,7 @@
 {
   "experiments": {
-    "intro": "Small explorations in code and computation."
+    "intro": "Small explorations in code and computation.",
+    "hidden": true
   },
   "posts": {
     "intro": "Writing on programming and software design."
@@ -12,11 +13,6 @@
     ]
   },
   "about": {
-    "intro": "I’m Bruno Dias. I write about programming and build open-source software.",
-    "links": [
-      ["GitHub", "https://github.com/diasbruno"],
-      ["Substack", "https://www.substack.com/@diasbruno"],
-      ["LinkedIn", "https://www.linkedin.com/in/brunodiash/"]
-    ]
+    "intro": "I’m Bruno Dias, a software engineer based in Brazil."
   }
 }

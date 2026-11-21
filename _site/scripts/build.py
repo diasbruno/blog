@@ -175,9 +175,9 @@ def post_indexes(posts):
     return outputs
 
 
-def navigation(current=None, *, current_kind="page"):
+def navigation(sections, current=None, *, current_kind="page"):
     links = []
-    for name, (label, _) in SECTIONS.items():
+    for name, (label, _) in sections.items():
         selected = f' aria-current="{current_kind}"' if name == current else ""
         links.append(f'<li><a class="nav-{name}" href="/{name}/" data-site-navigation{selected}>{label}</a></li>')
     return "<ul>\n" + "\n".join(links) + "\n</ul>"
@@ -338,9 +338,9 @@ def project_list(data):
     return render("project-list", projects="\n".join(rows), organizations="\n".join(organizations))
 
 
-def project_pages(data, footer, public_posts):
+def project_pages(data, footer, public_posts, sections):
     pages = {}
-    header = render("header", navigation=navigation("projects", current_kind="location"))
+    header = render("header", navigation=navigation(sections, "projects", current_kind="location"))
     for project in data["projects"]:
         slug = project["slug"]
         route = f"/projects/{slug}/"
@@ -385,6 +385,12 @@ def generate(catalog=None):
         )
     }
     unavailable = private_pages | {content_path(name) for name in private_pages}
+    section_content = json.loads((SOURCE / "content" / "sections.json").read_text(encoding="utf-8"))
+    if section_content.keys() != SECTIONS.keys():
+        raise ValueError("Section content must match the site navigation")
+    sections = {name: section for name, section in SECTIONS.items() if not section_content[name].get("hidden")}
+    for name in SECTIONS.keys() - sections.keys():
+        unavailable.update((f"{name}/index.html", f"{name}/content.json"))
     legacy = legacy_paths()
     for name in legacy:
         if not (ROOT / name).is_file():
@@ -401,30 +407,33 @@ def generate(catalog=None):
             language="en",
             metadata="",
             header="",
-            content=render("landing", navigation=navigation(), signature=signature),
+            content=render("landing", navigation=navigation(sections), signature=signature),
             json_url="/content.json",
             intro_script=render("landing-start"),
             footer="",
         ),
     }
-    section_content = json.loads((SOURCE / "content" / "sections.json").read_text(encoding="utf-8"))
-    if section_content.keys() != SECTIONS.keys():
-        raise ValueError("Section content must match the site navigation")
     projects = load_projects()
     footer = render("footer", modifier="")
-    for name, (heading, theme) in SECTIONS.items():
+    for name, (heading, theme) in sections.items():
         entry = section_content[name]
         if not entry["intro"].strip():
             raise ValueError(f"Missing {name} introduction")
         intro = escape(entry["intro"])
-        rows = render_links(entry.get("links", []))
-        body = '<ul class="section-links">\n' + rows + "\n</ul>" if rows else ""
-        if name == "posts":
-            body = post_list(ordered)
-        elif name == "projects":
-            body = project_list(projects) + body
-        elif name == "about":
-            body = render("about-links", links=body)
+        if name == "about":
+            about_source = SOURCE / "content" / "about.md"
+            content = render(
+                "about", heading=heading, intro=intro,
+                body=article_headings(markdown_body(about_source.read_text(encoding="utf-8"), about_source.name)),
+            )
+        else:
+            rows = render_links(entry.get("links", []))
+            body = '<ul class="section-links">\n' + rows + "\n</ul>" if rows else ""
+            if name == "posts":
+                body = post_list(ordered)
+            elif name == "projects":
+                body = project_list(projects) + body
+            content = render("section", heading=heading, intro=intro, body=body)
         page = f"{name}/index.html"
         outputs[page] = render(
             "base",
@@ -433,14 +442,14 @@ def generate(catalog=None):
             theme=theme,
             language="en",
             metadata="",
-            header=render("header", navigation=navigation(name)),
-            content=render("section", heading=heading, intro=intro, body=body),
+            header=render("header", navigation=navigation(sections, name)),
+            content=content,
             json_url="/" + content_path(page),
             intro_script="",
             footer=footer,
         )
 
-    post_navigation = render("header", navigation=navigation("posts", current_kind="location"))
+    post_navigation = render("header", navigation=navigation(sections, "posts", current_kind="location"))
     for slug, post in public.items():
         canonical = f"posts/{slug}/index.html"
         content = render_post(post, public)
@@ -460,7 +469,7 @@ def generate(catalog=None):
                 footer=footer,
             )
 
-    outputs.update(project_pages(projects, footer, public))
+    outputs.update(project_pages(projects, footer, public, sections))
     for page, html in tuple(outputs.items()):
         outputs[content_path(page)] = companion(page, html)
     archived = archive_pages(legacy, footer=render("footer", modifier=" site-footer--archive"))

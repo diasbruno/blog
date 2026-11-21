@@ -23,7 +23,7 @@ def main():
                 raise ValueError(f"Stale footer: {name}. Run make build.")
         for name in sorted(unavailable):
             if owned_path(name).exists():
-                raise ValueError(f"Unpublished post output exists: {name}. Run make build.")
+                raise ValueError(f"Unpublished output exists: {name}. Run make build.")
     print(f"Checked {len(expected)} generated files, {len(archived)} archive pages, and the published file inventory")
 
 
