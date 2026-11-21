@@ -28,6 +28,13 @@ a:hover { text-decoration-thickness: .12em; }
 a:focus-visible { outline: 2px solid currentColor; outline-offset: .28rem; }
 img { display: block; max-width: 100%; height: auto; }
 
+#site-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
 .visually-hidden,
 .skip-link:not(:focus) {
   position: absolute;
@@ -160,6 +167,7 @@ nav a[aria-current="page"] {
 }
 
 .section {
+  flex: 1;
   padding-block: clamp(3rem, 9vw, 7rem) 5rem;
 }
 

@@ -16,7 +16,8 @@ legacy files. There are no Python packages to install.
   `make build` and refresh the browser.
 - `make check` checks generated files, local links, and the preserved publishing inventory.
 - `make clean` removes files listed in the publishing checkout’s
-  `.site-generated.json`. Run `make build` afterwards to restore them.
+  `.site-generated.json` and removes the shared footer from archived pages.
+  Run `make build` afterwards to restore the generated files and footer.
 
 Set `DESTINATION` on a Make command to target a different publishing checkout,
 for example `make build DESTINATION=/tmp/site-preview`.
@@ -24,6 +25,10 @@ for example `make build DESTINATION=/tmp/site-preview`.
 Edit section content under `_site/content/`, layouts under `_site/templates/`,
 and the styles and signature under `_site/static/`. Fraunces is self-hosted under
 the SIL Open Font License included with the font.
+
+Edit the shared footer in `_site/templates/footer.html`. The build includes it in
+Experiments, Posts, Projects, and About and inserts marked footer blocks into
+archived articles and the open-source directory.
 
 Each page has a complete HTML document at its normal URL and a companion
 `content.json` in the same directory. The JSON contains the page path, title,

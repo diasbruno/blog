@@ -19,6 +19,8 @@ SOURCE = Path(__file__).resolve().parents[1]
 ROOT = Path(os.environ.get("SITE_DESTINATION", SOURCE.parent.parent / "diasbruno.github.io")).expanduser().resolve()
 MANIFEST = ROOT / ".site-generated.json"
 ASSET_ROOT = "assets/site"
+FOOTER_STYLE = f'<link rel="stylesheet" href="/{ASSET_ROOT}/footer.css">'
+ARCHIVE_FOOTER = re.compile(r"\n<!-- site-footer:(?:style|markup) -->\n.*?\n<!-- /site-footer -->", re.DOTALL)
 SECTIONS = {
     "experiments": ("Experiments", "dark"),
     "posts": ("Posts", "light"),
@@ -116,6 +118,28 @@ def companion(page, html):
     ) + "\n"
 
 
+def archive_pages(legacy, *, footer=None):
+    pages = {}
+    for name in legacy:
+        if not name.endswith("/index.html"):
+            continue
+        path = ROOT / name
+        if path.resolve() != path:
+            raise ValueError(f"Archive path crosses a symlink: {name}")
+        html = ARCHIVE_FOOTER.sub("", path.read_bytes().decode("utf-8"))
+        if footer is not None:
+            for kind, content, tag in (
+                ("style", FOOTER_STYLE, "</head>"),
+                ("markup", footer, "</body>"),
+            ):
+                before, end, after = html.rpartition(tag)
+                if not end:
+                    raise ValueError(f"{name}: missing {tag}")
+                html = f"{before}\n<!-- site-footer:{kind} -->\n{content.strip()}\n<!-- /site-footer -->{end}{after}"
+        pages[name] = html
+    return pages
+
+
 def generate():
     legacy = legacy_paths()
     for name in legacy:
@@ -134,11 +158,13 @@ def generate():
             content=render("landing", navigation=navigation(), signature=signature),
             json_url="/content.json",
             intro_script=render("landing-start"),
+            footer="",
         ),
     }
     section_content = json.loads((SOURCE / "content" / "sections.json").read_text(encoding="utf-8"))
     if section_content.keys() != SECTIONS.keys():
         raise ValueError("Section content must match the site navigation")
+    footer = render("footer", modifier="")
     for name, (heading, theme) in SECTIONS.items():
         entry = section_content[name]
         if not entry["intro"].strip():
@@ -171,13 +197,14 @@ def generate():
             content=render("section", heading=heading, intro=intro, body=body),
             json_url="/" + content_path(page),
             intro_script="",
+            footer=footer,
         )
 
     for page, html in tuple(outputs.items()):
         outputs[content_path(page)] = companion(page, html)
-    for page in legacy:
-        if page.endswith("/index.html"):
-            outputs[content_path(page)] = companion(page, (ROOT / page).read_text(encoding="utf-8"))
+    archived = archive_pages(legacy, footer=render("footer", modifier=" site-footer--archive"))
+    for page, html in archived.items():
+        outputs[content_path(page)] = companion(page, html)
 
     files = {name: content.encode("utf-8") for name, content in outputs.items()}
     static = SOURCE / "static"
@@ -185,7 +212,7 @@ def generate():
         if path.is_file() and not path.name.startswith("."):
             files[f"{ASSET_ROOT}/{path.name}"] = path.read_bytes()
     validate(files, legacy)
-    return files
+    return files, {page: html.encode("utf-8") for page, html in archived.items()}
 
 
 def validate(files, legacy):
@@ -257,7 +284,7 @@ def remove_output(name):
 
 
 def publish():
-    files = generate()
+    files, archived = generate()
     current = recorded_outputs()
     expected = {name: digest(content) for name, content in files.items()}
     # The first build replaces the previous homepage, whose source remains in Git history.
@@ -270,7 +297,7 @@ def publish():
 
     with TemporaryDirectory(prefix=".site-build-", dir=ROOT) as directory:
         stage = Path(directory)
-        for name, content in files.items():
+        for name, content in (files | archived).items():
             staged = stage / name
             staged.parent.mkdir(parents=True, exist_ok=True)
             staged.write_bytes(content)
@@ -281,16 +308,28 @@ def publish():
             destination.parent.mkdir(parents=True, exist_ok=True)
             if not destination.exists() or digest(destination.read_bytes()) != expected[name]:
                 (stage / name).replace(destination)
+        for name, html in archived.items():
+            if (ROOT / name).read_bytes() != html:
+                (stage / name).replace(ROOT / name)
         for name in current.keys() - expected.keys():
             remove_output(name)
         manifest.replace(MANIFEST)
-    print(f"Built {len(files)} files at {ROOT}")
+    print(f"Built {len(files)} files and updated {len(archived)} archive pages at {ROOT}")
 
 
 def clean():
     current = recorded_outputs()
     for name, checksum in current.items():
         check_replacement(name, checksum, None)
+    archived = archive_pages(name for name in legacy_paths() if (ROOT / name).is_file())
+    with TemporaryDirectory(prefix=".site-clean-", dir=ROOT) as directory:
+        stage = Path(directory) / "archive.html"
+        for name, html in archived.items():
+            path = ROOT / name
+            original = html.encode("utf-8")
+            if path.read_bytes() != original:
+                stage.write_bytes(original)
+                stage.replace(path)
     for name in current:
         remove_output(name)
     MANIFEST.unlink(missing_ok=True)
