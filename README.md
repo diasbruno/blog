@@ -63,3 +63,6 @@ repository artwork under `_site/static/projects/`.
 
 Edit the About bio in `_site/content/about.md` and its introduction in
 `_site/content/sections.json`.
+
+The Verona language section at `/vrn/` uses `_site/content/vrn.md` for its body
+and `_site/content/sections.json` for its introduction and links.

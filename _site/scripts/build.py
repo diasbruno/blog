@@ -44,6 +44,7 @@ ARTICLE_REDIRECT = re.compile(
 )
 SECTIONS = {
     "experiments": ("Experiments", "dark"),
+    "vrn": ("vrn", "dark"),
     "posts": ("Posts", "light"),
     "projects": ("Projects", "light"),
     "about": ("About", "dark"),
@@ -179,6 +180,8 @@ def navigation(sections, current=None, *, current_kind="page"):
     links = []
     for name, (label, _) in sections.items():
         selected = f' aria-current="{current_kind}"' if name == current else ""
+        if name == "vrn":
+            label = f'<span class="nav-label">{label}</span> <span class="nav-badge">research</span>'
         links.append(f'<li><a class="nav-{name}" href="/{name}/" data-site-navigation{selected}>{label}</a></li>')
     return "<ul>\n" + "\n".join(links) + "\n</ul>"
 
@@ -402,7 +405,7 @@ def generate(catalog=None):
         "index.html": render(
             "base",
             title="Bruno Dias",
-            description="Experiments, writing, and open-source projects by Bruno Dias.",
+            description="Bruno Dias’s writing, open-source projects, and notes on the Verona language.",
             theme="dark",
             language="en",
             metadata="",
@@ -415,16 +418,18 @@ def generate(catalog=None):
     }
     projects = load_projects()
     footer = render("footer", modifier="")
-    for name, (heading, theme) in sections.items():
+    for name, (label, theme) in sections.items():
         entry = section_content[name]
         if not entry["intro"].strip():
             raise ValueError(f"Missing {name} introduction")
         intro = escape(entry["intro"])
-        if name == "about":
-            about_source = SOURCE / "content" / "about.md"
+        heading = entry.get("heading", label)
+        if name in {"about", "vrn"}:
+            source = SOURCE / "content" / f"{name}.md"
+            body = article_headings(markdown_body(source.read_text(encoding="utf-8"), source.name))
             content = render(
-                "about", heading=heading, intro=intro,
-                body=article_headings(markdown_body(about_source.read_text(encoding="utf-8"), about_source.name)),
+                name, heading=escape(heading), intro=intro, body=body,
+                links=render_links(entry.get("links", []), enhance=True),
             )
         else:
             rows = render_links(entry.get("links", []))
@@ -433,11 +438,11 @@ def generate(catalog=None):
                 body = post_list(ordered)
             elif name == "projects":
                 body = project_list(projects) + body
-            content = render("section", heading=heading, intro=intro, body=body)
+            content = render("section", heading=escape(heading), intro=intro, body=body)
         page = f"{name}/index.html"
         outputs[page] = render(
             "base",
-            title=f"{heading} · Bruno Dias",
+            title=f'{escape(entry.get("page_title", heading))} · Bruno Dias',
             description=intro,
             theme=theme,
             language="en",

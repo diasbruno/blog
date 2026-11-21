@@ -3,6 +3,17 @@
     "intro": "Small explorations in code and computation.",
     "hidden": true
   },
+  "vrn": {
+    "heading": "Verona",
+    "page_title": "The Verona language",
+    "intro": "A statically typed systems language with S-expressions, native compilation, and explicit C interoperability.",
+    "links": [
+      ["Official site", "https://verona-project.github.io/"],
+      ["Repository", "https://github.com/verona-project/verona"],
+      ["Command-line reference", "https://github.com/verona-project/verona/blob/HEAD/docs/command-line.org"],
+      ["Verona project page", "/projects/verona/"]
+    ]
+  },
   "posts": {
     "intro": "Writing on programming and software design."
   },

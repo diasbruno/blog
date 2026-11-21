@@ -99,17 +99,37 @@ nav a {
   text-transform: uppercase;
 }
 
-nav a:hover,
-nav a[aria-current] {
+nav a:not(.nav-vrn):hover,
+nav a:not(.nav-vrn)[aria-current],
+nav .nav-vrn:hover .nav-label,
+nav .nav-vrn[aria-current] .nav-label {
   text-decoration: underline;
   text-underline-offset: .37em;
 }
 
+nav .nav-vrn {
+  gap: .45rem;
+  text-transform: none;
+}
+
+.nav-badge {
+  padding: .1em .42em;
+  border: 1px solid currentColor;
+  border-radius: .25rem;
+  color: var(--projects-ink);
+  font: 400 .64rem/1.25 var(--mono);
+  letter-spacing: 0;
+}
+
+.dark .nav-badge { color: var(--projects); }
+
 .dark .nav-experiments { color: var(--experiments); }
+.dark .nav-vrn { color: var(--vrn); }
 .dark .nav-posts { color: var(--posts); }
 .dark .nav-projects { color: var(--projects); }
 .dark .nav-about { color: var(--about); }
 .light .nav-experiments { color: var(--experiments-ink); }
+.light .nav-vrn { color: var(--vrn-ink); }
 .light .nav-posts { color: var(--posts-ink); }
 .light .nav-projects { color: var(--projects-ink); }
 .light .nav-about { color: var(--about-ink); }
@@ -120,6 +140,10 @@ nav a[aria-current] {
   display: grid;
   place-items: center;
   padding: var(--gutter);
+  background-image: url("vrn/calico.png");
+  background-size: clamp(6.5rem, 15vw, 12rem) auto;
+  background-position: right var(--gutter) bottom clamp(1rem, 4vh, 2rem);
+  background-repeat: no-repeat;
 }
 
 .landing-menu {
@@ -358,6 +382,30 @@ nav a[aria-current] {
   color: var(--quiet);
 }
 
+.post-body .research-warning {
+  --warning-accent: var(--projects-ink);
+  margin-block: 1.5rem;
+  padding: .85rem 1rem;
+  border-inline-start: 3px solid var(--warning-accent);
+  background-color: #f0e9d9;
+  color: var(--foreground);
+}
+
+.dark .post-body .research-warning {
+  --warning-accent: var(--projects);
+  background-color: #322c22;
+}
+
+.post-body > .research-warning:first-child { margin-block-start: 0; }
+.research-warning p { margin: 0; }
+
+.research-warning strong {
+  color: var(--warning-accent);
+  font: 600 .75rem/1.5 var(--mono);
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
 .post-body pre {
   overflow-x: auto;
   padding: 1rem;
@@ -365,6 +413,31 @@ nav a[aria-current] {
   font-size: .875rem;
   line-height: 1.5;
 }
+
+.vrn-page {
+  background-image: url("vrn/calico.png");
+  background-size: clamp(14rem, 26vw, 22rem) auto;
+  background-position: right 3.75rem top clamp(3rem, 9vw, 7rem);
+  background-repeat: no-repeat;
+}
+
+.vrn-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: clamp(6rem, 20vw, 12rem);
+  max-width: 62rem;
+  padding-right: clamp(6.75rem, 33vw, 19rem);
+}
+
+.vrn-page .post-columns { background-color: var(--background); }
+
+.vrn-page .post-body pre {
+  background: #2b282d;
+  border: 1px solid var(--rule);
+}
+
+.vrn-page .post-links a { color: var(--vrn); }
 
 .post-body code,
 .post-detail time { font-family: var(--mono); }
@@ -411,6 +484,9 @@ nav a[aria-current] {
 
 @media (max-width: 35rem) {
   .site-header nav { flex-basis: 100%; }
+  .vrn-page { background-size: clamp(7rem, 37vw, 11rem) auto; }
+  .vrn-header { padding-right: clamp(9.5rem, 41vw, 11.5rem); }
+  .vrn-header h1 { font-size: clamp(2.5rem, 12.7vw, 3.15rem); }
   .post-list li { grid-template-columns: 1fr; row-gap: .35rem; }
   .project-row { grid-template-columns: clamp(4.25rem, 19vw, 5.5rem) minmax(0, 1fr); }
   .project-arrow { display: none; }

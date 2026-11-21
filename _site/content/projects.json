@@ -8,6 +8,7 @@
       "role": "Contributor",
       "image": "verona.png",
       "links": [
+        ["Verona language notes", "/vrn/"],
         ["Repository", "https://github.com/verona-project/verona"],
         ["Project website", "https://verona-project.github.io/"],
         ["Command-line reference", "https://github.com/verona-project/verona/blob/HEAD/docs/command-line.org"]
