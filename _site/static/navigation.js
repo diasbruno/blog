@@ -55,6 +55,8 @@ async function navigate(url, { traverse = false } = {}) {
       document.body.className = page.body.className;
       description.content = page.querySelector('meta[name="description"]')?.content || "";
       alternate.href = path + "content.json";
+      for (const tag of document.head.querySelectorAll("[data-post-metadata]")) tag.remove();
+      document.head.append(...page.head.querySelectorAll("[data-post-metadata]"));
       documentPage.replaceChildren(...content.childNodes);
       for (const link of navigationPaths(documentPage)) knownPaths.add(link);
       window.scrollTo(0, traverse ? scrollPositions.get(path) || 0 : 0);

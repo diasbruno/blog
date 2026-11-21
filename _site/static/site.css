@@ -100,7 +100,7 @@ nav a {
 }
 
 nav a:hover,
-nav a[aria-current="page"] {
+nav a[aria-current] {
   text-decoration: underline;
   text-underline-offset: .37em;
 }
@@ -213,6 +213,92 @@ nav a[aria-current="page"] {
   text-underline-offset: .16em;
 }
 
+.post-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 44rem) minmax(9rem, 1fr);
+  gap: 2rem;
+  border-top: 1px solid var(--rule);
+  padding-block-start: 2rem;
+}
+
+.post-detail h1 { font-size: clamp(2.5rem, 7vw, 4.75rem); }
+
+.post-detail .post-category {
+  margin: 0 0 .9rem;
+  font: 600 .75rem/1.4 var(--mono);
+  letter-spacing: .09em;
+  text-transform: uppercase;
+}
+
+.post-detail .post-subtitle {
+  max-width: 60ch;
+  font-style: italic;
+}
+
+.post-body {
+  min-width: 0;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+
+.post-body > :first-child,
+.post-links h2 { margin-block-start: 0; }
+
+.post-body h2,
+.post-body h3,
+.post-body h4 {
+  margin-block: 1.8em .5em;
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.post-body figure { margin-inline: 0; }
+.post-body img { margin-block: 1rem; }
+.post-body iframe { max-width: 100%; border: 0; }
+
+.post-body blockquote {
+  margin-inline: 0;
+  border-inline-start: 2px solid var(--rule);
+  padding-inline-start: 1.2rem;
+  color: var(--quiet);
+}
+
+.post-body pre {
+  overflow-x: auto;
+  padding: 1rem;
+  background: #ece7de;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.post-body code,
+.post-detail time { font-family: var(--mono); }
+
+.post-links {
+  position: sticky;
+  top: 1.5rem;
+  align-self: start;
+}
+
+.post-links h2 { font: 400 1.35rem/1.25 var(--serif); }
+
+.post-links ul {
+  display: grid;
+  gap: .65rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.archive-note,
+.missing-figure {
+  margin-inline: 0;
+  padding: .75rem 1rem;
+  border: 1px solid var(--rule);
+  color: var(--quiet);
+}
+
 .about-links {
   display: flex;
   align-items: center;
@@ -231,4 +317,6 @@ nav a[aria-current="page"] {
 @media (max-width: 35rem) {
   .site-header nav { flex-basis: 100%; }
   .post-list li { grid-template-columns: 1fr; row-gap: .35rem; }
+  .post-columns { grid-template-columns: minmax(0, 1fr); }
+  .post-links { position: static; }
 }
